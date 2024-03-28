@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1311.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
+   <content>
+      <VBox prefHeight="840.0" prefWidth="1295.0">
+         <children>
+            <MenuBar>
+              <menus>
+                  <Menu mnemonicParsing="false" text="New Reactor">
+                    <items>
+                      <MenuItem fx:id="menuItemCSTR" mnemonicParsing="false" onAction="#onMenuItemCSTRAction" text="CSTR" />
+                    </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox>
+               <children>
+                  <Pane prefHeight="840.0" prefWidth="1295.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>
