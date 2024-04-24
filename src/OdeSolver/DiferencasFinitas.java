@@ -63,8 +63,6 @@ public class DiferencasFinitas {
 
 			derivadaAdiantada = derivadaAdiantada.replace(matcher2.group().toString(), novaExpressao1);
 
-			// fim = matcher2.group().toString().substring(3,
-			// 4)+"[i]-"+matcher2.group().toString().substring(3, 4)+"[i-1]";
 
 			String novaExpressao2 = "(2*" + matcher2.group().toString().substring(3, 4) + "[i]-5*"
 					+ matcher2.group().toString().substring(3, 4) + "[i-1]+4*"
