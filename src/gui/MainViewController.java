@@ -67,7 +67,8 @@ public class MainViewController implements Initializable {
 
         rectangles.add(rectangle);
 
-        /*
+        draggableMaker.makeDraggable(rectangle);
+
         rectangle.setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
                 try {
@@ -89,9 +90,6 @@ public class MainViewController implements Initializable {
             }
         });
 
-        draggableMaker.makeDraggable(rectangle);
-
-         */
 
 
     }
