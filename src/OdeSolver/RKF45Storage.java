@@ -35,7 +35,6 @@ public class RKF45Storage {
 		for (int i = 0; i < 6; i++) {
 			List<Double> listaK = new ArrayList<Double>();
 			for (int j = 0; j < listaVariaveis.size() - 1; j++) {
-
 				listaK.add(0.0);
 			}
 			K.add(listaK);
@@ -44,7 +43,6 @@ public class RKF45Storage {
 		List<Expression> expressoes = new ArrayList<Expression>();
 
 		for (int i = 0; i < funcoes.size(); i++) {
-
 			expressoes.add(new ExpressionBuilder(funcoes.get(i)).variables(setVariaveis).build());
 		}
 
@@ -95,10 +93,7 @@ public class RKF45Storage {
 			resultado.add(resultadoInicial.get(0));
 			resultado.add(resultadoInicial.get(1));
 			resultado.add(resultadoInicial.get(2));
-			resultado.add(resultadoInicial.get(3));
-			if (resultadoInicial.size() / (listaVariaveis.size() - 1) == 5) {
-				resultado.add(resultadoInicial.get(4));
-			}
+
 
 			for (int f = resultadoInicial.size() / (listaVariaveis.size() - 1); f < listaVariaveis.size() - 1; f++) {
 				resultado.add(resultados.get(i).get(f) + ((16.0 / 135.0) * K.get(0).get(f)
