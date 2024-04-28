@@ -26,7 +26,7 @@ public class Main extends Application {
 
 			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
-			primaryStage.setTitle("Sample JavaFX application");
+			primaryStage.setTitle("Reactor Simulator");
 			//primaryStage.setMaximized(true);
 			primaryStage.show();
 

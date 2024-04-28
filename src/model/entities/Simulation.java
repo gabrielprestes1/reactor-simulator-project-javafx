@@ -29,7 +29,7 @@ public class Simulation {
         Reactor reactor = new Reactor();
         L = reactor.getL();
 
-        equacoes = new CSTR().pdeBuilder(reactor);
+        equacoes = new PFR().pdeBuilder(reactor);
 
         List<String> listaVariaveis = new ArrayList<String>();
 

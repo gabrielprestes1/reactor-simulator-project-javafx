@@ -33,7 +33,6 @@ public class GraphFormController implements Initializable{
         List<List<Double>> reults;
         reults = simulation.simulated();
 
-        reults.forEach(System.out::println);
 
         List<String> equacoes = new ArrayList<String>();
         Reactor reactor = new Reactor();
@@ -54,6 +53,8 @@ public class GraphFormController implements Initializable{
         XYChart.Series cbXZ = new XYChart.Series();
         XYChart.Series tXZ = new XYChart.Series();
 
+
+
         for (int i = 0; i < reults.get(reults.size() - 1).size() / (equacoes.size()); i++) {
 
             Double exp = Double.parseDouble(formatter.format(i * reactor.getL() / Double.valueOf(particoes)));
@@ -66,8 +67,13 @@ public class GraphFormController implements Initializable{
             tXZ.getData().add(new XYChart.Data(exp.toString(), T));
 
         }
+        caXZ.setName("A Concentration");
+        cbXZ.setName("B Concentration");
+        tXZ.setName("Temperature");
+
         chartCon.getData().addAll(caXZ, cbXZ);
         chartTemp.getData().add(tXZ);
+
     }
 
     @Override
