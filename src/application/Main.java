@@ -30,19 +30,6 @@ public class Main extends Application {
 			//primaryStage.setMaximized(true);
 			primaryStage.show();
 
-			CSTR cstr = new CSTR();
-
-			/*
-			double [] results = cstr.CSTRTest();
-
-			System.out.println("Fourth order Runge-Kutta procedure");
-			System.out.println("The value of y[0] at x =  is " + results[0]);
-			System.out.println("The value of y[1] at x =  is " + results[1]);
-			System.out.println("The value of y[2] at x =  is " + results[2]);
-			System.out.println("The value of y[3] at x =  is " + results[3]);
-
-						 */
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -13,7 +13,7 @@ public class PFR {
     Double Cp = 50.00;
     Double deltah = 830.00;
     Double U = 20000.00;
-    Double Tm = 500.00;
+    Double T0 = 436.00;
     Double Vz = 0.001;
     Double R = 8.314;
     Double Dab = 0.295;
@@ -31,7 +31,7 @@ public class PFR {
         String a = "A= " +  Vz + "*d[A0](t,z)/dz+" + Dab + "*d2[A0](t,z)/dz2-" + reaction;
         String b = "B= " +  Vz + "*d[B0](t,z)/dz+" + Dab + "*d2[B0](t,z)/dz2+" + reaction;
 
-        String c = "T= " + "-" + Vz*Rho*Cp + "*d[T0](t,z)/dz+" + UTC + "*([T0](t,z)-" + Tm + ")-" + reaction + "*(-" + deltah + ")";
+        String c = "T= " + "-" + Vz*Rho*Cp + "*d[T0](t,z)/dz+" + UTC + "*([T0](t,z)-" + T0 + ")-" + reaction + "*(-" + deltah + ")";
 
         equations.add(a);
         equations.add(b);

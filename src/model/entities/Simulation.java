@@ -3,7 +3,6 @@ package model.entities;
 import OdeSolver.DiferencasFinitas;
 import OdeSolver.RKF45Storage;
 import gui.util.Alerts;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Simulation {
         Reactor reactor = new Reactor();
         L = reactor.getL();
 
-        equacoes = new PFR().pdeBuilder(reactor);
+        equacoes = new CSTR().pdeBuilder(reactor);
 
         List<String> listaVariaveis = new ArrayList<String>();
 

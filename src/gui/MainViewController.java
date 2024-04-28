@@ -1,14 +1,12 @@
 package gui;
 
-import OdeSolver.DiferencasFinitas;
-import OdeSolver.RK4SistemasEdos;
-import OdeSolver.RKF45Storage;
+
 import application.Main;
 import gui.util.Alerts;
 
 import gui.util.DraggableMaker;
 
-import javafx.application.Platform;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,9 +20,7 @@ import javafx.scene.shape.Rectangle;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.entities.PFR;
-import model.entities.Reactor;
-import model.entities.Simulation;
+
 
 
 import java.io.IOException;
@@ -126,11 +122,11 @@ public class MainViewController implements Initializable {
             if (mouseEvent.getClickCount() == 2) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/PFRForm.fxml"));
-                    Pane anchorPane = loader.load();
+                    ScrollPane scrollPane = loader.load();
 
                     Stage dialogStage = new Stage();
                     dialogStage.setTitle("Enter PFR data");
-                    dialogStage.setScene(new Scene(anchorPane));
+                    dialogStage.setScene(new Scene(scrollPane));
                     dialogStage.setResizable(false);
                     dialogStage.initOwner(mainScene.getWindow());
                     dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -174,11 +170,11 @@ public class MainViewController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/GraphForm.fxml"));
-            Pane anchorPane = loader.load();
+            Pane pane = loader.load();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Results");
-            dialogStage.setScene(new Scene(anchorPane));
+            dialogStage.setScene(new Scene(pane));
             dialogStage.setResizable(false);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.showAndWait();

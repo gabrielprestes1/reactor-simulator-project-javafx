@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -13,7 +14,7 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1311.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
    <content>
-      <VBox prefHeight="840.0" prefWidth="1295.0">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="855.0" prefWidth="1295.0">
          <children>
             <MenuBar>
               <menus>
@@ -42,13 +43,13 @@
             </MenuBar>
             <HBox>
                <children>
-                  <Pane prefHeight="840.0" prefWidth="1295.0" />
+                  <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="840.0" prefWidth="1295.0" />
                </children>
             </HBox>
             <ToolBar prefHeight="44.0" prefWidth="1295.0">
               <items>
-                  <Separator prefHeight="25.0" prefWidth="1228.0" />
-                <Button fx:id="buttonrun" alignment="CENTER" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
+                  <Separator maxWidth="2500.0" prefHeight="25.0" prefWidth="1238.0" />
+                <Button fx:id="buttonrun" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
               </items>
             </ToolBar>
          </children>

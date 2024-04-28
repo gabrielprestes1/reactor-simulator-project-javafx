@@ -3,11 +3,11 @@ package model.entities;
 public class Reactor {
 
     private Integer reaction;
-    private Double CA0 = 100.0;
+    private Double CA0 = 900.0;
     private Double CB0 = 0.0;
     private Double k0 = 2.26*Math.pow(10, 14);
     private Double E = 14570.00;
-    private Double T0 = 433.00;
+    private Double T0 = 436.00;
     private Double L = 3.0;
 
     private Double FinalTime = 10.0;
