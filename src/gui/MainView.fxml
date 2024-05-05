@@ -49,7 +49,7 @@
             <ToolBar prefHeight="44.0" prefWidth="1295.0">
               <items>
                   <Separator maxWidth="2500.0" prefHeight="25.0" prefWidth="1238.0" />
-                <Button fx:id="buttonrun" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
+                <Button fx:id="buttonRun" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
               </items>
             </ToolBar>
          </children>

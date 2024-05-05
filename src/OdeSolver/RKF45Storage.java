@@ -1,14 +1,14 @@
 package OdeSolver;
 
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class RKF45Storage {
 
@@ -17,7 +17,7 @@ public class RKF45Storage {
 	public Double progress = 0.0;
 
 	public List<List<Double>> Resolve(List<String> funcoes, List<String> listaVariaveis, List<Double> resultadoInicial,
-			Double finalT, Double hMin, Double hMax) {
+									  Double finalT, Double hMin, Double hMax) {
 
 		Set<String> setVariaveis = new HashSet<String>(listaVariaveis);
 
@@ -35,6 +35,7 @@ public class RKF45Storage {
 		for (int i = 0; i < 6; i++) {
 			List<Double> listaK = new ArrayList<Double>();
 			for (int j = 0; j < listaVariaveis.size() - 1; j++) {
+
 				listaK.add(0.0);
 			}
 			K.add(listaK);
@@ -43,6 +44,7 @@ public class RKF45Storage {
 		List<Expression> expressoes = new ArrayList<Expression>();
 
 		for (int i = 0; i < funcoes.size(); i++) {
+
 			expressoes.add(new ExpressionBuilder(funcoes.get(i)).variables(setVariaveis).build());
 		}
 
@@ -93,7 +95,11 @@ public class RKF45Storage {
 			resultado.add(resultadoInicial.get(0));
 			resultado.add(resultadoInicial.get(1));
 			resultado.add(resultadoInicial.get(2));
+			resultado.add(resultadoInicial.get(3));
 
+			if (resultadoInicial.size() / (listaVariaveis.size() - 1) == 5) {
+				resultado.add(resultadoInicial.get(4));
+			}
 
 			for (int f = resultadoInicial.size() / (listaVariaveis.size() - 1); f < listaVariaveis.size() - 1; f++) {
 				resultado.add(resultados.get(i).get(f) + ((16.0 / 135.0) * K.get(0).get(f)
@@ -115,7 +121,7 @@ public class RKF45Storage {
 	}
 
 	private void KCalculate(List<Expression> expressoes, List<List<Double>> K, List<List<Double>> resultados,
-			List<String> listaVariaveis, Double t, Double h, Integer i) {
+							List<String> listaVariaveis, Double t, Double h, Integer i) {
 
 		for (int k = 0; k < 6; k++) {
 

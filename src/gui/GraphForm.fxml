@@ -23,7 +23,7 @@
             <CategoryAxis label="Width (m)" prefWidth="443.0" side="BOTTOM" />
          </xAxis>
          <yAxis>
-            <NumberAxis label="Temperature (K)" side="LEFT" />
+            <NumberAxis autoRanging="false" label="Temperature (K)" lowerBound="400.0" minorTickCount="200" side="LEFT" tickUnit="20.0" upperBound="600.0" />
          </yAxis>
       </LineChart>
       <Pane prefHeight="138.0" prefWidth="1121.0" style="-fx-background-color: blue;">

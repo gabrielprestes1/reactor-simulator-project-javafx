@@ -1,23 +1,40 @@
-package model.entities;
+package gui;
 
 import OdeSolver.DiferencasFinitas;
 import OdeSolver.RKF45Storage;
 import gui.util.Alerts;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressBar;
+import model.entities.CSTR;
+import model.entities.Reactor;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Simulation {
+
+public class LoadingBarController implements PropertyChangeListener {
+
+    @FXML
+    private ProgressBar progressBar = new ProgressBar();
+
+    private Integer nParticoes = 1;
+    private Double progress = 0.0;
+
+    private List<Double> tValues = new ArrayList<Double>();
+    private List<String> equacoes = new ArrayList<String>();
+    private List<String> listaVariaveis = new ArrayList<String>();
+    private List<String> condicoesIniciais = new ArrayList<String>();
+    private List<List<String>> resultadoDiferencasFinitas = new ArrayList<List<String>>();
+    private List<String> variaveis = new ArrayList<String>();
+    private List<String> funcoes = new ArrayList<String>();
+    private  List<Double> resultadosIniciais = new ArrayList<Double>();
+    private List<List<Double>> resultados = new ArrayList<List<Double>>();
 
     DiferencasFinitas diferencasFinitas = new DiferencasFinitas();
-
-    List<List<Double>> resultados = new ArrayList<List<Double>>();
-
-    Double L = 0.0;
-
-    List<Double> tValues = new ArrayList<Double>();
-
-    List<String> equacoes = new ArrayList<String>();
+    Reactor reactor = new Reactor();
 
 
     public List<List<Double>> simulated(){
@@ -25,15 +42,10 @@ public class Simulation {
         resultados.clear();
         equacoes.clear();
         tValues.clear();
+        listaVariaveis.add("t");
 
-        Reactor reactor = new Reactor();
-        L = reactor.getL();
+        equacoes = new CSTR().pdeBuilder(reactor);
 
-        equacoes = new PFR().pdeBuilder(reactor);
-
-        List<String> listaVariaveis = new ArrayList<String>();
-
-        Integer nParticoes = 1;
         try{
             nParticoes = Integer.parseInt(reactor.getnParticoes().toString());
         }
@@ -42,24 +54,16 @@ public class Simulation {
             Alerts.showAlert("Parameter not set or invalid", "Parameter: " + errorParameter, null, Alert.AlertType.ERROR);
         }
 
-        final Integer particoes = nParticoes;
-
         Double z0 = 0.0;
         Double zf = 1.0;
 
-        List<String> condicoesIniciais = new ArrayList<String>();
-
         condicoesIniciais.add(reactor.getCA0().toString());
         condicoesIniciais.add(reactor.getCB0().toString());
-        condicoesIniciais.add(reactor.getT0().toString());
+        condicoesIniciais.add(reactor.getCC0().toString());
+        condicoesIniciais.add(reactor.getCD0().toString());
 
         Integer numeroEquacoes = equacoes.size();
 
-        List<List<String>> resultadoDiferencasFinitas = new ArrayList<List<String>>();
-
-        listaVariaveis.add("t");
-
-        List<String> variaveis = new ArrayList<String>();
 
         for (int i = 0; i < numeroEquacoes; i++) {
             String equacao = equacoes.get(i).split("=")[1];
@@ -75,8 +79,6 @@ public class Simulation {
             }
         }
 
-        List<String> funcoes = new ArrayList<String>();
-
         for (int i = 0; i < resultadoDiferencasFinitas.get(0).size(); i++) {
             for (int j = 0; j < numeroEquacoes; j++) {
                 funcoes.add(resultadoDiferencasFinitas.get(j).get(i));
@@ -84,24 +86,39 @@ public class Simulation {
 
         }
 
-        List<Double> resultadosIniciais = new ArrayList<Double>();
 
         for (int i = 1; i < listaVariaveis.size(); i++) {
             resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(0)));
             resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(1)));
             resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(2)));
+            resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(3)));
         }
 
         RKF45Storage rkf45 = new RKF45Storage();
+        rkf45.addObserver(this);
+
 
         List<List<Double>> Resultados = rkf45.Resolve(funcoes, listaVariaveis, resultadosIniciais,
                 Double.valueOf(reactor.getFinalTime().toString()),
                 Double.valueOf(reactor.getMinStep().toString()), Double.valueOf(reactor.getMaxStep().toString()));
 
-
         resultados.addAll(Resultados);
 
-
         return resultados;
+
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        progress = Double.parseDouble(evt.getNewValue().toString());
+        updateProgressBar(progress);
+    }
+
+    public void updateProgressBar(Double valor){
+        progressBar.setProgress(valor);
+    }
+
+    public Double getProgress() {
+        return progress;
     }
 }

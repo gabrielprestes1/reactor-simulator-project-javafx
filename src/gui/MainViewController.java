@@ -1,34 +1,36 @@
 package gui;
 
 
+
 import application.Main;
-import gui.util.Alerts;
+
 
 import gui.util.DraggableMaker;
 
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+
 import javafx.fxml.Initializable;
 
-import javafx.scene.Node;
+
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+
+import model.entities.CSTR;
+import model.entities.Reactor;
 
 
-
-import java.io.IOException;
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
+
 
 
 public class MainViewController implements Initializable {
@@ -47,9 +49,9 @@ public class MainViewController implements Initializable {
     private MenuItem menuItemPFR;
 
     @FXML
-    private Button buttonrun;
+    private Button buttonRun;
 
-
+    LoadView loadView = new LoadView();
 
     private List<Rectangle> rectangles = new ArrayList<>();
 
@@ -76,22 +78,7 @@ public class MainViewController implements Initializable {
 
         rectangle.setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/CSTRForm.fxml"));
-                    Pane anchorPane = loader.load();
-
-                    Stage dialogStage = new Stage();
-                    dialogStage.setTitle("Enter CSTR data");
-                    dialogStage.setScene(new Scene(anchorPane));
-                    dialogStage.setResizable(false);
-                    dialogStage.initOwner(mainScene.getWindow());
-                    dialogStage.initModality(Modality.WINDOW_MODAL);
-                    dialogStage.showAndWait();
-                }
-                catch (IOException e){
-                    e.printStackTrace();
-                    Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-                }
+                loadView.loadNewView("/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) ->{});
             }
         });
 
@@ -120,22 +107,7 @@ public class MainViewController implements Initializable {
 
         rectangle.setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getClickCount() == 2) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/PFRForm.fxml"));
-                    ScrollPane scrollPane = loader.load();
-
-                    Stage dialogStage = new Stage();
-                    dialogStage.setTitle("Enter PFR data");
-                    dialogStage.setScene(new Scene(scrollPane));
-                    dialogStage.setResizable(false);
-                    dialogStage.initOwner(mainScene.getWindow());
-                    dialogStage.initModality(Modality.WINDOW_MODAL);
-                    dialogStage.showAndWait();
-                }
-                catch (IOException e){
-                    e.printStackTrace();
-                    Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-                }
+                loadView.loadNewView("/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) ->{});
             }
         });
 
@@ -143,46 +115,44 @@ public class MainViewController implements Initializable {
     }
 
 
-    private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-            VBox newVbox = loader.load();
-
-            Scene mainScene = Main.getMainScene();
-            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
-            Node mainMenu = mainVBox.getChildren().get(0);
-            mainVBox.getChildren().clear();
-            mainVBox.getChildren().add(mainMenu);
-            mainVBox.getChildren().addAll(newVbox.getChildren());
-
-            T controller = loader.getController();
-            initializingAction.accept(controller);
-        }
-        catch (IOException e) {
-            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-
     @FXML
     private void btSimulateAction() {
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/GraphForm.fxml"));
-            Pane pane = loader.load();
+        LoadingBarController loadingBarController = new LoadingBarController();
 
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Results");
-            dialogStage.setScene(new Scene(pane));
-            dialogStage.setResizable(false);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
-        }
+        loadView.loadLoadingView("LoadingBar.fxml", "Loading", (LoadingBarController controller) -> {
+            Thread loadingThread = new Thread(() -> {
+                while (true) {
+                    controller.updateProgressBar(loadingBarController.getProgress());
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
+            Thread simulationThread = new Thread(() -> {
+                Reactor reactor = new Reactor();
+                List<List<Double>> results = loadingBarController.simulated();
+                List<String> equations = new CSTR().pdeBuilder(reactor);
+                Integer partitions = reactor.getnParticoes();
+
+                Platform.runLater(() -> {
+
+                    loadView.closeView();
+
+                    Platform.runLater(()-> {
+                        loadView.loadNewView("GraphForm.fxml", "Results", (GraphFormController graphController) -> {
+                            graphController.setResults(results, equations, partitions, reactor);
+                        });
+                    });
+
+                });
+            });
+            simulationThread.start();
+            loadingThread.start();
+        });
     }
 
 
@@ -190,4 +160,5 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class PFR {
 
+    Reactor reactor = new Reactor();
 
 
     Double Rho = 0.9;
@@ -19,6 +20,8 @@ public class PFR {
     Double Dab = 0.295;
 
     Double UTC = (2*U)/R;
+    Double tConv = - Vz / reactor.getL();
+    Double tDiff = Dab / (reactor.getL() * reactor.getL());
 
 
 
@@ -28,8 +31,8 @@ public class PFR {
 
         String reaction = new KineticsBuilder().kineticsBuilder(reactor);
 
-        String a = "A= " +  Vz + "*d[A0](t,z)/dz+" + Dab + "*d2[A0](t,z)/dz2-" + reaction;
-        String b = "B= " +  Vz + "*d[B0](t,z)/dz+" + Dab + "*d2[B0](t,z)/dz2+" + reaction;
+        String a = "A= " +  tConv + "*d[A0](t,z)/dz +" + tDiff + "*d2[A0](t,z)/dz2+" + reaction;
+        String b = "B= " +  tConv + "*d[B0](t,z)/dz +" + tDiff + "*d2[B0](t,z)/dz2-" + reaction;
 
         String c = "T= " + "-" + Vz*Rho*Cp + "*d[T0](t,z)/dz+" + UTC + "*([T0](t,z)-" + T0 + ")-" + reaction + "*(-" + deltah + ")";
 
