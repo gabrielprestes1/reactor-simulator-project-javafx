@@ -1,38 +1,29 @@
 package gui;
 
-
-
-import application.Main;
-
-
 import gui.util.DraggableMaker;
 
-
 import gui.util.LoadView;
-import javafx.application.Platform;
+
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
 
-
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-
-import javafx.stage.StageStyle;
-import model.entities.PFR;
-import model.entities.Reactor;
-
-
+import java.io.*;
 import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
+import gui.PFRFormController;
+import javafx.stage.StageStyle;
 
+import static java.lang.Double.parseDouble;
 
 
 public class MainViewController implements Initializable {
@@ -72,14 +63,13 @@ public class MainViewController implements Initializable {
 
         rectangles.add(rectangle);
 
-        draggableMaker.makeDraggable(rectangle,"/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {});
+        //draggableMaker.makeDraggable(rectangle,"/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {});
 
 
     }
 
-    public void onMenuItemPFRAction() {
+   public void onMenuItemPFRAction() {
         Rectangle rectangle = new Rectangle(100, 100, Color.PINK);
-
         pane.getChildren().add(rectangle);
 
         rectangle.layoutXProperty().bind(pane.widthProperty().subtract(rectangle.getWidth()).divide(2));
@@ -88,48 +78,41 @@ public class MainViewController implements Initializable {
         rectangles.add(rectangle);
 
         draggableMaker.makeDraggable(rectangle, "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) ->{});
-
     }
 
 
     @FXML
     private void btSimulateAction() {
 
-        LoadingBarController loadingBarController = new LoadingBarController();
+        try {
+            String pythonPath = "C:\\Users\\Gabri\\project-tcc\\reactor-simulator-project-javafx\\venv\\Scripts\\python.exe";
+            String pythonScriptPath = "C:\\Users\\Gabri\\project-tcc\\reactor-simulator-project-javafx\\src\\model\\simulator\\PFR.py";
 
-        loadView.loadView("/gui/LoadingBar.fxml", "Loading", (LoadingBarController controller) -> {
-            Thread loadingThread = new Thread(() -> {
-                while (true) {
-                    controller.updateProgressBar(loadingBarController.getProgress());
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            String[] command = {
+                    pythonPath,
+                    pythonScriptPath,
+            };
 
-            Thread simulationThread = new Thread(() -> {
-                Reactor reactor = new Reactor();
-                List<List<Double>> results = loadingBarController.simulated();
-                List<String> equations = new PFR().pdeBuilder(reactor);
-                Integer partitions = reactor.getnParticoes();
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            Process process = processBuilder.start();
 
-                Platform.runLater(() -> {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
 
-                    loadView.closeView();
+            int exitCode = process.waitFor();
+            System.out.println("Exit Code: " + exitCode);
 
-                    Platform.runLater(()-> {
-                        loadView.loadView("/gui/GraphForm.fxml", "Results", (GraphFormController graphController) -> {
-                            graphController.setResults(results, equations, partitions, reactor);
-                        }, StageStyle.DECORATED);
-                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                });
-            });
-            simulationThread.start();
-            loadingThread.start();
-        }, StageStyle.UNDECORATED);
+
+        LoadView view = new LoadView();
+        view.loadView("/gui/GraphForm.fxml", "Results", (GraphFormController controller) ->{}, StageStyle.DECORATED);
+
     }
 
     @Override
