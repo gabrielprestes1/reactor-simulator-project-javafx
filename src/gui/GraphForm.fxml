@@ -1,39 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
-<AnchorPane prefHeight="641.0" prefWidth="1121.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
-   <children>
-      <LineChart fx:id="chartCon" layoutX="30.0" layoutY="191.0">
-        <xAxis>
-          <CategoryAxis label="Width (m)" prefWidth="443.0" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis label="Concentration (Kg/m^3)" side="LEFT" />
-        </yAxis>
-      </LineChart>
-      <LineChart fx:id="chartTemp" layoutX="568.0" layoutY="191.0">
-         <xAxis>
-            <CategoryAxis label="Width (m)" prefWidth="443.0" side="BOTTOM" />
-         </xAxis>
-         <yAxis>
-            <NumberAxis autoRanging="false" label="Temperature (K)" lowerBound="400.0" minorTickCount="200" side="LEFT" tickUnit="20.0" upperBound="600.0" />
-         </yAxis>
-      </LineChart>
-      <Pane prefHeight="138.0" prefWidth="1121.0" style="-fx-background-color: blue;">
-         <children>
-            <Label layoutX="451.0" layoutY="31.0" text="RESULTS" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="53.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-   </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController" prefHeight="600.0" prefWidth="800.0">
+    <children>
+        <LineChart fx:id="lineChart" layoutX="14.0" layoutY="14.0" prefHeight="570.0" prefWidth="772.0">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" label="Distance"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" label="Value"/>
+            </yAxis>
+        </LineChart>
+    </children>
 </AnchorPane>
