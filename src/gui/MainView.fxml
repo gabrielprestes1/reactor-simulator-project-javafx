@@ -1,58 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1311.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
-   <content>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="855.0" prefWidth="1295.0">
-         <children>
-            <MenuBar>
-              <menus>
-                  <Menu mnemonicParsing="false" text="New Reactor">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="855.0" prefWidth="1176.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
+    <children>
+        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="New Reactor">
                     <items>
-                      <MenuItem fx:id="menuItemCSTR" mnemonicParsing="false" onAction="#onMenuItemCSTRAction" text="CSTR" />
+                        <MenuItem fx:id="menuItemCSTR" mnemonicParsing="false" onAction="#onMenuItemCSTRAction" text="CSTR" />
                         <MenuItem fx:id="menuItemPFR" mnemonicParsing="false" onAction="#onMenuItemPFRAction" text="PFR" />
                     </items>
-                  </Menu>
+                </Menu>
                 <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                    </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
                 </Menu>
-              </menus>
-            </MenuBar>
-            <HBox>
-               <children>
-                  <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="840.0" prefWidth="1295.0" />
-               </children>
-            </HBox>
-            <ToolBar prefHeight="44.0" prefWidth="1295.0">
-              <items>
-                  <Separator maxWidth="2500.0" prefHeight="25.0" prefWidth="1238.0" />
-                <Button fx:id="buttonRun" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
-              </items>
-            </ToolBar>
-         </children>
-      </VBox>
-   </content>
-</ScrollPane>
+            </menus>
+        </MenuBar>
+        <Pane fx:id="pane" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0" />
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <items>
+                <Button fx:id="buttonRun" mnemonicParsing="false" onAction="#btSimulateAction" text="Run" />
+            </items>
+        </ToolBar>
+    </children>
+</AnchorPane>

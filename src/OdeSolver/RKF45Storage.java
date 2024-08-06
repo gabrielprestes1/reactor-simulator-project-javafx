@@ -17,7 +17,7 @@ public class RKF45Storage {
 	public Double progress = 0.0;
 
 	public List<List<Double>> Resolve(List<String> funcoes, List<String> listaVariaveis, List<Double> resultadoInicial,
-									  Double finalT, Double hMin, Double hMax) {
+									  Double finalT, Double hMin, Double hMax, Integer numberEquation) {
 
 		Set<String> setVariaveis = new HashSet<String>(listaVariaveis);
 
@@ -91,11 +91,12 @@ public class RKF45Storage {
 			}
 
 			List<Double> resultado = new ArrayList<Double>();
+
 			// condicoes de contorno
-			resultado.add(resultadoInicial.get(0));
-			resultado.add(resultadoInicial.get(1));
-			resultado.add(resultadoInicial.get(2));
-			resultado.add(resultadoInicial.get(3));
+			for (int j = 0; j < numberEquation; j++) {
+				resultado.add(resultadoInicial.get(j));
+			}
+
 
 			if (resultadoInicial.size() / (listaVariaveis.size() - 1) == 5) {
 				resultado.add(resultadoInicial.get(4));

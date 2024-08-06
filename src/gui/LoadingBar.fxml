@@ -9,11 +9,12 @@
 
 <AnchorPane prefHeight="156.0" prefWidth="370.0" style="-fx-border-color: blue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoadingBarController">
    <children>
-      <ProgressBar fx:id="progressBar" layoutX="60.0" layoutY="42.0" prefHeight="29.0" prefWidth="251.0" progress="0.0" />
-      <Label layoutX="120.0" layoutY="93.0" text="Please Wait">
+      <ProgressBar fx:id="progressBar" layoutX="60.0" layoutY="64.0" prefHeight="29.0" prefWidth="251.0" progress="0.0" />
+      <Label layoutX="120.0" layoutY="14.0" text="Please Wait">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
+      <Button fx:id="cancelButton" layoutX="159.0" layoutY="111.0" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
    </children>
 </AnchorPane>

@@ -3,9 +3,10 @@ package application;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import model.entities.CSTR;
+
 
 
 import java.io.IOException;
@@ -19,10 +20,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
-			ScrollPane scrollPane = loader.load();
+			AnchorPane scrollPane = loader.load();
 
-			scrollPane.setFitToHeight(true);
-			scrollPane.setFitToWidth(true);
 
 			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);

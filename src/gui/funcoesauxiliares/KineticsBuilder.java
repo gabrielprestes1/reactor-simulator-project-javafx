@@ -1,25 +1,30 @@
 package gui.funcoesauxiliares;
 
 
+import gui.PFRFormController;
 import model.entities.Reactor;
 
 public class KineticsBuilder {
 
 	public String kineticsBuilder(Reactor reactor) {
+
+		PFRFormController controller = new PFRFormController();
+
 		String equations = "";
-		equations = PLBuilderIrreversible(reactor);
+		equations = BuilderIrreversibleAndIsothermal(reactor, controller);
+
 		return equations;
 
 	}
 
-	private String PLBuilderIrreversible(Reactor reactor) {
+	private String BuilderIrreversibleAndIsothermal(Reactor reactor, PFRFormController controller) {
 
 		String kinetics = "";
 
-		Double K0 = reactor.getK0();
-		Double E = reactor.getE();
+        String reaction = controller.getKinetics();
+		Double k0 = reactor.getK0();
 
-			kinetics = K0 + "*exp(-" + E +"/ ([T0](t,z)))" + "*[A0](t,z)*[A0](t,z)";
+		kinetics = k0 + "*" + reaction;
 
 		return kinetics;
 	}

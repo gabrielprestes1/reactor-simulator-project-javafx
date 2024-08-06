@@ -8,222 +8,332 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="621.0" prefWidth="603.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="383.0" prefWidth="591.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PFRFormController">
    <content>
-      <VBox prefHeight="930.0" prefWidth="603.0">
+      <VBox prefHeight="384.0" prefWidth="589.0">
          <children>
-            <Pane prefHeight="70.0" prefWidth="603.0" style="-fx-background-color: blue;">
-               <children>
-                  <Label layoutX="225.0" layoutY="6.0" text="Enter data" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="34.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <GridPane prefHeight="876.0" prefWidth="628.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="CB0" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label prefHeight="21.0" prefWidth="51.0" text="CA0">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="T0" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="T_amb" GridPane.rowIndex="8">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Vz" GridPane.rowIndex="10">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Dab" GridPane.rowIndex="12">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="delta_H" GridPane.rowIndex="14">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="U" GridPane.rowIndex="16">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="E" GridPane.rowIndex="18">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="K0" GridPane.rowIndex="20">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Final Time" GridPane.rowIndex="22">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Min Step" GridPane.rowIndex="24">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Max Step" GridPane.rowIndex="26">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Number of Partitionss" GridPane.rowIndex="28">
-                     <GridPane.margin>
-                        <Insets left="20.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Width" GridPane.rowIndex="4">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Label>
-                  <TextField GridPane.rowIndex="1" />
-                  <TextField GridPane.rowIndex="3" />
-                  <TextField GridPane.rowIndex="5" />
-                  <TextField GridPane.rowIndex="7" />
-                  <TextField GridPane.rowIndex="9" />
-                  <TextField GridPane.rowIndex="11" />
-                  <TextField GridPane.rowIndex="13" />
-                  <TextField GridPane.rowIndex="15" />
-                  <TextField GridPane.rowIndex="17" />
-                  <TextField GridPane.rowIndex="19" />
-                  <TextField GridPane.rowIndex="21" />
-                  <TextField GridPane.rowIndex="23" />
-                  <TextField GridPane.rowIndex="25" />
-                  <TextField GridPane.rowIndex="27" />
-                  <TextField GridPane.rowIndex="29" />
-                  <Button mnemonicParsing="false" text="Cancel" GridPane.rowIndex="30">
-                     <GridPane.margin>
-                        <Insets left="420.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Save" textAlignment="CENTER" GridPane.rowIndex="30">
-                     <GridPane.margin>
-                        <Insets left="481.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Label alignment="TOP_LEFT" text="Kg/m^3">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Kg/m^3" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="m" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="K" GridPane.rowIndex="6">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="K" GridPane.rowIndex="8">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="m/s" GridPane.rowIndex="10">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="m^2/s" GridPane.rowIndex="12">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="KJ/mol" GridPane.rowIndex="14">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="cal/m^2*h*K" GridPane.rowIndex="16">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="K" GridPane.rowIndex="18">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="1/h" GridPane.rowIndex="20">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="h" GridPane.rowIndex="22">
-                     <GridPane.margin>
-                        <Insets left="450.0" />
-                     </GridPane.margin>
-                  </Label>
-               </children>
-               <VBox.margin>
-                  <Insets left="40.0" right="40.0" top="10.0" />
-               </VBox.margin>
-            </GridPane>
+            <TabPane fx:id="tabPane" prefHeight="354.0" prefWidth="589.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="reaction" text="Reaction">
+                     <content>
+                        <VBox prefHeight="312.0" prefWidth="589.0">
+                           <children>
+                              <Label text="Write the reaction of the process">
+                                 <VBox.margin>
+                                    <Insets left="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="textReaction" prefHeight="29.0" prefWidth="456.0" promptText="2A -&gt; B">
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="100.0" top="5.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </TextField>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="59.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="514.0" minWidth="10.0" prefWidth="410.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Button fx:id="insertButton" mnemonicParsing="false" onAction="#onInsertButtonAction" text="Insert" />
+                                    <CheckBox fx:id="abstractCheckBox" mnemonicParsing="false" selected="true" text="Abstract" GridPane.columnIndex="1" />
+                                    <CheckBox fx:id="isothermalCheckBox" mnemonicParsing="false" selected="true" text="Isothermal" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="75.0" />
+                                       </GridPane.margin>
+                                    </CheckBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="100.0" top="5.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label fx:id="concA" text="Initial Concentration of A">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="concB" text="Initial Concentration of B" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="concC" text="Initial Concentration of C" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="concD" text="Initial Concentration of D" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <TextField fx:id="textConcA" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="textConcB" GridPane.rowIndex="3">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="textConcC" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="textConcD" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label fx:id="un1" text="Kg/m^3">
+                                       <GridPane.margin>
+                                          <Insets left="220.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un2" text="Kg/m^3" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="220.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un3" text="Kg/m^3" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="228.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un4" text="Kg/m^3" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="228.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <TextField fx:id="textFrequencyFactor" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="textActivationEnergy" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label fx:id="frequencyFactor" text="Frequency Factor" GridPane.rowIndex="4">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="activationEnergy" text="Activation Energy" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un5" text="cal/mol.K" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                       <GridPane.margin>
+                                          <Insets left="222.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" top="5.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </content>
+                  </Tab>
+                <Tab fx:id="getData" text="Get Data">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Data Reactor">
+                                 <VBox.margin>
+                                    <Insets left="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <TextField fx:id="width" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label text="Reactor Width">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="Diffusion Coefficient" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <TextField fx:id="diffusion" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="flow" GridPane.rowIndex="3">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label text="Inlet Flow" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <TextField fx:id="density" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label text="Density" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <CheckBox fx:id="isobaricCheckBox" mnemonicParsing="false" onAction="#onIsobaricPress" selected="true" text="Isobaric" GridPane.rowIndex="4">
+                                       <GridPane.margin>
+                                          <Insets top="5.0" />
+                                       </GridPane.margin>
+                                    </CheckBox>
+                                    <TextField fx:id="initialTemperature" GridPane.rowIndex="6">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="specificHeat" GridPane.rowIndex="8">
+                                       <GridPane.margin>
+                                          <Insets right="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="coefficientHeat" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <TextField fx:id="deltaH" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" />
+                                       </GridPane.margin>
+                                    </TextField>
+                                    <Label fx:id="textInitialTemperature" text="Initial Temperature" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="textSpecificHeat" text="Specific Heat" GridPane.rowIndex="7">
+                                       <GridPane.margin>
+                                          <Insets top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="textCoefficientHeat" text="Global heat exchange coefficient" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="textDeltaH" text="Ratio between enthalpy change" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                       <GridPane.margin>
+                                          <Insets left="7.5" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="m">
+                                       <GridPane.margin>
+                                          <Insets left="255.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="m^3/h" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="227.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un6" text="K" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets left="255.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="Kg/m^3" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="228.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un7" text="cal.Kg/K" GridPane.rowIndex="7">
+                                       <GridPane.margin>
+                                          <Insets left="221.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un8" text="cal/m^2.h.K" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                       <GridPane.margin>
+                                          <Insets left="208.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label text="m/h" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="248.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label fx:id="un9" text="cal/Kg" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                       <GridPane.margin>
+                                          <Insets left="239.0" top="15.0" />
+                                       </GridPane.margin>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </content></Tab>
+              </tabs>
+            </TabPane>
+            <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="7.0" prefWidth="589.0">
+              <items>
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
+                <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextButton" text="Next" />
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButton" text="Exit" />
+              </items>
+            </ToolBar>
          </children>
       </VBox>
    </content>

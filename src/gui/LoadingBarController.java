@@ -3,10 +3,14 @@ package gui;
 import OdeSolver.DiferencasFinitas;
 import OdeSolver.RKF45Storage;
 import gui.util.Alerts;
+import gui.util.LoadView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Stage;
 import model.entities.CSTR;
+import model.entities.PFR;
 import model.entities.Reactor;
 
 import java.beans.PropertyChangeEvent;
@@ -19,6 +23,9 @@ public class LoadingBarController implements PropertyChangeListener {
 
     @FXML
     private ProgressBar progressBar = new ProgressBar();
+
+    @FXML
+    private Button cancelButton;
 
     private Integer nParticoes = 1;
     private Double progress = 0.0;
@@ -33,6 +40,7 @@ public class LoadingBarController implements PropertyChangeListener {
     private  List<Double> resultadosIniciais = new ArrayList<Double>();
     private List<List<Double>> resultados = new ArrayList<List<Double>>();
 
+
     DiferencasFinitas diferencasFinitas = new DiferencasFinitas();
     Reactor reactor = new Reactor();
 
@@ -44,7 +52,7 @@ public class LoadingBarController implements PropertyChangeListener {
         tValues.clear();
         listaVariaveis.add("t");
 
-        equacoes = new CSTR().pdeBuilder(reactor);
+        equacoes = new PFR().pdeBuilder(reactor);
 
         try{
             nParticoes = Integer.parseInt(reactor.getnParticoes().toString());
@@ -60,7 +68,8 @@ public class LoadingBarController implements PropertyChangeListener {
         condicoesIniciais.add(reactor.getCA0().toString());
         condicoesIniciais.add(reactor.getCB0().toString());
         condicoesIniciais.add(reactor.getCC0().toString());
-        condicoesIniciais.add(reactor.getCD0().toString());
+        //condicoesIniciais.add(reactor.getT0().toString());
+
 
         Integer numeroEquacoes = equacoes.size();
 
@@ -88,10 +97,9 @@ public class LoadingBarController implements PropertyChangeListener {
 
 
         for (int i = 1; i < listaVariaveis.size(); i++) {
-            resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(0)));
-            resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(1)));
-            resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(2)));
-            resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(3)));
+            for (int j = 0; j < numeroEquacoes; j++) {
+                resultadosIniciais.add(Double.valueOf(condicoesIniciais.get(j)));
+            }
         }
 
         RKF45Storage rkf45 = new RKF45Storage();
@@ -100,12 +108,17 @@ public class LoadingBarController implements PropertyChangeListener {
 
         List<List<Double>> Resultados = rkf45.Resolve(funcoes, listaVariaveis, resultadosIniciais,
                 Double.valueOf(reactor.getFinalTime().toString()),
-                Double.valueOf(reactor.getMinStep().toString()), Double.valueOf(reactor.getMaxStep().toString()));
+                Double.valueOf(reactor.getMinStep().toString()), Double.valueOf(reactor.getMaxStep().toString()), numeroEquacoes);
 
         resultados.addAll(Resultados);
 
         return resultados;
 
+    }
+
+    public void onCancelButton(){
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package model.entities;
 
+import gui.CSTRFormController;
 import gui.funcoesauxiliares.KineticsBuilder;
 
 import java.util.ArrayList;

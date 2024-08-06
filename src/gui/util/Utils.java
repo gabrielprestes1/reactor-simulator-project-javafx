@@ -1,103 +1,104 @@
 package gui.util;
 
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static Stage currentStage(ActionEvent event) {
-        return (Stage) ((Node) event.getSource()).getScene().getWindow();
-    }
+    public List<Integer> extractNumber(String s){
 
-    public static Integer tryParseToInt(String str) {
-        try {
-            return Integer.parseInt(str);
-        }
-        catch (NumberFormatException e) {
-            return null;
-        }
-    }
+        Pattern pattern = Pattern.compile("([0-9a-zA-Z])+");
+        Matcher matcher = pattern.matcher(s);
 
-    public static Double tryParseToDouble(String str) {
-        try {
-            return Double.parseDouble(str);
-        }
-        catch (NumberFormatException e) {
-            return null;
-        }
-    }
+        List<Integer> numbers = new ArrayList<>();
 
-    public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) {
-        tableColumn.setCellFactory(column -> {
-            TableCell<T, Date> cell = new TableCell<T, Date>() {
-                private SimpleDateFormat sdf = new SimpleDateFormat(format);
-                @Override
-                protected void updateItem(Date item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        setText(sdf.format(item));
+        while (matcher.find()) {
+            String compound = matcher.group();
+            if (compound.length() == 1) {
+                numbers.add(1);
+            } else {
+                for (char c: compound.toCharArray()){
+                    if (Character.isDigit(c)) {
+                        numbers.add(Character.getNumericValue(c));
                     }
                 }
-            };
-            return cell;
-        });
-    }
-    public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {
-        tableColumn.setCellFactory(column -> {
-            TableCell<T, Double> cell = new TableCell<T, Double>() {
-                @Override
-                protected void updateItem(Double item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        Locale.setDefault(Locale.US);
-                        setText(String.format("%."+decimalPlaces+"f", item));
-                    }
-                }
-            };
-            return cell;
-        });
+            }
+        }
+        return numbers;
     }
 
-    public static void formatDatePicker(DatePicker datePicker, String format) {
-        datePicker.setConverter(new StringConverter<LocalDate>() {
+    public List<Character> extractLetters(String s){
+        List<Character> letters = new ArrayList<>();
+        Pattern pattern = Pattern.compile("[a-zA-Z]");
+        Matcher matcher = pattern.matcher(s);
 
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(format);
-            {
-                datePicker.setPromptText(format.toLowerCase());
+        while (matcher.find()) {
+            letters.add(matcher.group().charAt(0));
+        }
+        return letters;
+    }
+
+    public boolean isBalanced(Map<String, Double> reagents, Map<String, Double> products) {
+        Map<String, Double> reagentsAtoms = countAtoms(reagents);
+        Map<String, Double> productsAtoms = countAtoms(products);
+
+        return reagentsAtoms.equals(productsAtoms);
+    }
+
+    public Map<String, Double> countAtoms(Map<String, Double> compounds) {
+        Map<String, Double> atoms = new HashMap<>();
+        for (Map.Entry<String, Double> entry : compounds.entrySet()) {
+            String compound = entry.getKey();
+            double coefficient = entry.getValue();
+            Map<String, Double> compoundAtoms = parseCompound(compound);
+            for (Map.Entry<String, Double> atomEntry : compoundAtoms.entrySet()) {
+                String atom = atomEntry.getKey();
+                double count = atomEntry.getValue() * coefficient;
+                atoms.put(atom, atoms.getOrDefault(atom, 0.0) + count);
             }
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
+        }
+        return atoms;
+    }
+
+    public Map<String, Double> parseCompound(String compound) {
+        Map<String, Double> atoms = new HashMap<>();
+        Matcher matcher = Pattern.compile("\\(?([A-Z][a-z]?)(\\d*)\\)?(\\d*)").matcher(compound);
+        while (matcher.find()) {
+            String element = matcher.group(1);
+            double count = 1.0;
+            if (!matcher.group(2).isEmpty()) {
+                count = Double.parseDouble(matcher.group(2));
             }
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
+            double multiplier = matcher.group(3).isEmpty() ? 1.0 : Double.parseDouble(matcher.group(3));
+            count *= multiplier;
+            atoms.put(element, atoms.getOrDefault(element, 0.0) + count);
+        }
+        return atoms;
+    }
+
+    public Map<String, Double> parseCompounds(String compounds) {
+        Map<String, Double> atoms = new HashMap<>();
+        String[] parts = compounds.split("\\+");
+        for (String part : parts) {
+            Map<String, Double> compoundAtoms = parseCompound(part.trim());
+            atoms.putAll(compoundAtoms);
+        }
+        return atoms;
+    }
+
+    public boolean validateNumberOfCompounds(String s) {
+        Pattern pattern = Pattern.compile("\\+");
+        Matcher matcher = pattern.matcher(s);
+
+        int n = 0;
+        while (matcher.find()) {
+            n++;
+        }
+        return n > 2;
     }
 
 }

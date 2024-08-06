@@ -93,6 +93,15 @@
             <type>pom</type>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.sf.jni4net/jni4net.j -->
+        <dependency>
+            <groupId>net.sf.jni4net</groupId>
+            <artifactId>jni4net.j</artifactId>
+            <version>0.8.8.0</version>
+            <type>pom</type>
+        </dependency>
+
+
     </dependencies>
 
     <build>

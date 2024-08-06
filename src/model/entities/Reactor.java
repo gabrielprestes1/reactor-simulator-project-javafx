@@ -1,17 +1,29 @@
 package model.entities;
 
+import gui.PFRFormController;
+
 public class Reactor {
 
-    private Integer reaction;
-    private Double CA0 = 0.05;
-    private Double CB0 = 0.025;
-    private Double CC0 = 0.0;
-    private Double CD0 = 0.0;
-    private Double k0 = 2.26*Math.pow(10, 14);
-    private Double E = 14570.00;
-    private Double T0 = 436.00;
-    private Double L = 10.0;
+    PFRFormController controller = new PFRFormController();
+
+    private Double CA0 = controller.getCA0();
+    private Double CB0 = controller.getCB0();
+    private Double CC0 = controller.getCC0();
+    private Double CD0 = controller.getCD0();
+    private Double k0 = controller.getK0();
+    private Double Ea = controller.getEa();
+    private Double Rho = controller.getRho();
+    private Double Vz = controller.getQ();
+    private Double Dab = controller.getDab();
+    private Double L = controller.getL();
+
+    private Double Cp;
+    private Double deltah;
+    private Double U;
+    private Double T0;
+
     private Double time = 500000.00;
+    private Double R = 8.314;
 
     private Double FinalTime = 1000.00;
     private Double MinStep = 0.001;
@@ -47,22 +59,16 @@ public class Reactor {
         return CB0;
     }
 
-
-
     public Double getK0() {
         return k0;
     }
 
-    public Double getE() {
-        return E;
+    public Double getEa() {
+        return Ea;
     }
 
     public Double getT0() {
         return T0;
-    }
-
-    public Integer getReaction() {
-        return reaction;
     }
 
     public Double getCC0() {
@@ -75,5 +81,21 @@ public class Reactor {
 
     public Double getTime() {
         return time;
+    }
+
+    public Double getR() {
+        return R;
+    }
+
+    public Double getRho() {
+        return Rho;
+    }
+
+    public Double getVz() {
+        return Vz;
+    }
+
+    public Double getDab() {
+        return Dab;
     }
 }
