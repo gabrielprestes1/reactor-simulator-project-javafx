@@ -100,6 +100,7 @@ public class PFRFormController {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter(filePath)) {
             gson.toJson(data, writer);
+            writer.flush();
         }
     }
 

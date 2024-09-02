@@ -1,7 +1,7 @@
 import numpy as np
 import cantera as ct
 import json
-import pandas as pd
+import matplotlib.pyplot as plt
 
 def process_PRF(data):
     yaml_file = data['yamlFile']
@@ -42,50 +42,55 @@ def process_PRF(data):
                     x=net.distance,
                     speed=reactor.speed)
 
-    # Coletar dados para saída
-    mass_idx = []
-    mole_idx = []
-    mass_labels = []
-    mole_labels = []
 
+    # Plot the results
+    plt.rcParams['figure.constrained_layout.use'] = True
+    f, ax = plt.subplots(2, 2, figsize=(15,8))
+
+    # plot the temperature profile along the flow direction
+    ax_t = ax[0, 0].plot(soln.x, soln.T[:], color='C3',  label='temperature')
+    ax[0, 0].set(xlabel='Distance (m)', ylabel='Temperature (K)')
+
+    # plot the pressure of the gas along the flow direction
+    ax_p = ax[0, 0].twinx()
+    h_p = ax_p.plot(soln.x, soln.P, color='C2', label='pressure')
+    ax_p.set(ylabel='Pressure (Pa)')
+    ax_p.legend(handles=ax_t+h_p, loc='best')
+
+    # plot gas velocity along the flow direction
+    h_vel = ax[0, 1].plot(soln.x, soln.speed, color='C0', label='velocity')
+    ax[0, 1].set(xlabel='Distance (m)', ylabel='Velocity (m/s)')
+
+    # plot gas density along the flow direction
+    ax_rho = ax[0, 1].twinx()
+    h_rho = ax_rho.plot(soln.x, soln.density * 1000, color='C1', label='density')
+    ax_rho.set(ylabel=r'Density ($\mathregular{g/cm^3}$)')
+    ax_rho.legend(handles=h_vel+h_rho, loc='best')
+
+    # plot major and minor gas species separately
+    minor_idx = []
+    major_idx = []
     for i, name in enumerate(gas.species_names):
         mean = np.mean(soln(name).Y)
         if mean >= 0.01:
-            mass_idx.append(i)
-            mole_idx.append(i)
-            if mean >= 0.01:  # Usar a mesma condição para rótulos de massa e mole
-                mass_labels.append(gas.species_name(i))
-                mole_labels.append(gas.species_name(i))
+            major_idx.append(i)
+            minor_idx.append(i)
 
-    # Coletar dados de frações
-    mass_data = [soln.Y[:, j] for j in mass_idx]
-    mole_data = [soln.Y[:, j] for j in mole_idx]
+    # plot major gas species along the flow direction
+    for j in major_idx:
+        ax[1, 0].plot(soln.x, soln.Y[:,j], label=gas.species_name(j))
+    ax[1, 0].legend(fontsize=8, loc='best')
+    ax[1, 0].set(xlabel='Distance (m)', ylabel='Mass Fraction')
 
-    distance = soln.x
-    temperature = soln.T
-    pressure = soln.P
-    speed = soln.speed
-    density = soln.density * 1000  # kg/m^3
+    # plot minor gas species along the flow direction
+    for j in minor_idx:
+        ax[1, 1].plot(soln.x, soln.X[:,j], label=gas.species_name(j))
+    ax[1, 1].legend(fontsize=8, loc='best')
+    ax[1, 1].set(xlabel='Distance (m)', ylabel='Mole Fraction')
 
-    # Criar DataFrame com dados básicos
-    df = pd.DataFrame({
-        'Distance': distance,
-        'Temperature': temperature,
-        'Pressure': pressure,
-        'Speed': speed,
-        'Density (kg/m^3)': density
-    })
+    plt.savefig('src/model/simulator/results.png')
 
-    # Adicionar frações de massa
-    for i, label in enumerate(mass_labels):
-        df[f'Mass Fraction ({label})'] = mass_data[i]
 
-    # Adicionar frações molares
-    for i, label in enumerate(mole_labels):
-        df[f'Mole Fraction ({label})'] = mole_data[i]
-
-    # Salvar DataFrame em um arquivo CSV
-    df.to_csv('C:/Users/Gabri/project-tcc/reactor-simulator-project-javafx/src/model/simulator/Dados.csv', index=False)
 
 if __name__ == "__main__":
     json_file_path = "C:/Users/Gabri/project-tcc/reactor-simulator-project-javafx/src/model/simulator/input.json"

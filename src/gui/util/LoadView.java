@@ -43,6 +43,33 @@ public class LoadView {
         }
     }
 
+    public synchronized <T> void loadView(String absoluteName, String title, Consumer<T> initializingAction, StageStyle style, Boolean blockWindow) {
+
+        Scene mainScene = Main.getMainScene();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Parent pane = loader.load();
+
+            T controller = loader.getController();
+            initializingAction.accept(controller);
+
+            dialogStage = new Stage();
+            dialogStage.setTitle(title);
+            dialogStage.setScene(new Scene(pane));
+            dialogStage.setResizable(blockWindow);
+            dialogStage.initOwner(mainScene.getWindow());
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initStyle(style);
+            dialogStage.showAndWait();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
 
     public void closeView() {
         dialogStage.close();

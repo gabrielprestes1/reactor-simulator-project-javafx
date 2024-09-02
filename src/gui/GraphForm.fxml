@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController" prefHeight="600.0" prefWidth="800.0">
-    <children>
-        <LineChart fx:id="lineChart" layoutX="14.0" layoutY="14.0" prefHeight="570.0" prefWidth="772.0">
-            <xAxis>
-                <CategoryAxis fx:id="xAxis" label="Distance"/>
-            </xAxis>
-            <yAxis>
-                <NumberAxis fx:id="yAxis" label="Value"/>
-            </yAxis>
-        </LineChart>
-    </children>
-</AnchorPane>
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1167.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
+   <content>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="694.0" prefWidth="1163.0">
+         <children>
+            <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                <Button mnemonicParsing="false" text="Button" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

@@ -4,6 +4,7 @@ import gui.util.DraggableMaker;
 
 import gui.util.LoadView;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+
 import gui.PFRFormController;
 import javafx.stage.StageStyle;
 
@@ -65,7 +68,6 @@ public class MainViewController implements Initializable {
 
         //draggableMaker.makeDraggable(rectangle,"/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {});
 
-
     }
 
    public void onMenuItemPFRAction() {
@@ -83,10 +85,10 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void btSimulateAction() {
-
+        LoadView view = new LoadView();
         try {
-            String pythonPath = "C:\\Users\\Gabri\\project-tcc\\reactor-simulator-project-javafx\\venv\\Scripts\\python.exe";
-            String pythonScriptPath = "C:\\Users\\Gabri\\project-tcc\\reactor-simulator-project-javafx\\src\\model\\simulator\\PFR.py";
+            String pythonPath = "venv/Scripts/python.exe";
+            String pythonScriptPath = "src/model/simulator/PFR.py";
 
             String[] command = {
                     pythonPath,
@@ -96,22 +98,17 @@ public class MainViewController implements Initializable {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             Process process = processBuilder.start();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-
             int exitCode = process.waitFor();
-            System.out.println("Exit Code: " + exitCode);
+            if (exitCode == 0) {
+                process.onExit();
+                view.loadView("/gui/GraphForm.fxml", "Results", (GraphFormController controller) -> {}, StageStyle.DECORATED);
+            } else {
+                System.out.println("Ocorreu um erro na execução do script Python. Código de saída: " + exitCode);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        LoadView view = new LoadView();
-        view.loadView("/gui/GraphForm.fxml", "Results", (GraphFormController controller) ->{}, StageStyle.DECORATED);
 
     }
 
