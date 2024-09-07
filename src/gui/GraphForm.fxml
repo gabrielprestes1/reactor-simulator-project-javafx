@@ -15,9 +15,10 @@
       <VBox alignment="BOTTOM_CENTER" prefHeight="694.0" prefWidth="1163.0">
          <children>
             <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                <Button mnemonicParsing="false" text="Save As..." />
+                  <Button mnemonicParsing="false" text="Close" />
               </items>
             </ToolBar>
          </children>

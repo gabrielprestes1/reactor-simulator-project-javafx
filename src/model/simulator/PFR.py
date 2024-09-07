@@ -1,9 +1,9 @@
 import numpy as np
 import cantera as ct
-import json
 import matplotlib.pyplot as plt
 
 def process_PRF(data):
+
     yaml_file = data['yamlFile']
     T0 = float(data['initialTemperature'])
     pressure = float(data['initialPressure'])
@@ -11,6 +11,7 @@ def process_PRF(data):
     D = float(data['diameter'])
     length = float(data['length'])
     u0 = float(data['inflowVelocity'])
+    energyChoice = int(data['energyChoice'])
 
     # Carregar a solução do arquivo YAML
     gas = ct.Solution(yaml_file)
@@ -21,7 +22,11 @@ def process_PRF(data):
     reactor = ct.FlowReactor(gas)
     reactor.area = Ac
     reactor.mass_flow_rate = gas.density * u0 * Ac
-    reactor.energy_enabled = True
+
+    if energyChoice == 1:
+        reactor.energy_enabled = True
+    else:
+        reactor.energy_enabled = False
 
     # Criar os reservatórios
     upstream = ct.Reservoir(gas, name='upstream')
@@ -67,7 +72,6 @@ def process_PRF(data):
     ax_rho.set(ylabel=r'Density ($\mathregular{g/cm^3}$)')
     ax_rho.legend(handles=h_vel+h_rho, loc='best')
 
-    # plot major and minor gas species separately
     minor_idx = []
     major_idx = []
     for i, name in enumerate(gas.species_names):
@@ -76,13 +80,11 @@ def process_PRF(data):
             major_idx.append(i)
             minor_idx.append(i)
 
-    # plot major gas species along the flow direction
     for j in major_idx:
         ax[1, 0].plot(soln.x, soln.Y[:,j], label=gas.species_name(j))
     ax[1, 0].legend(fontsize=8, loc='best')
     ax[1, 0].set(xlabel='Distance (m)', ylabel='Mass Fraction')
 
-    # plot minor gas species along the flow direction
     for j in minor_idx:
         ax[1, 1].plot(soln.x, soln.X[:,j], label=gas.species_name(j))
     ax[1, 1].legend(fontsize=8, loc='best')
@@ -91,11 +93,3 @@ def process_PRF(data):
     plt.savefig('src/model/simulator/results.png')
 
 
-
-if __name__ == "__main__":
-    json_file_path = "C:/Users/Gabri/project-tcc/reactor-simulator-project-javafx/src/model/simulator/input.json"
-
-    with open(json_file_path, 'r') as f:
-        data = json.load(f)
-
-    process_PRF(data)

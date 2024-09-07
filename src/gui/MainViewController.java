@@ -88,7 +88,7 @@ public class MainViewController implements Initializable {
         LoadView view = new LoadView();
         try {
             String pythonPath = "venv/Scripts/python.exe";
-            String pythonScriptPath = "src/model/simulator/PFR.py";
+            String pythonScriptPath = "src/model/simulator/Simulation.py";
 
             String[] command = {
                     pythonPath,

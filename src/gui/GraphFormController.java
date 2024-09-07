@@ -1,9 +1,10 @@
 package gui;
 
+import gui.util.Alerts;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 
 import java.io.File;
 
@@ -21,12 +22,12 @@ public class GraphFormController {
     public void loadPNG() {
         File file = new File("src/model/simulator/results.png");
 
-        // Verifica se o arquivo existe antes de tentar carregar
         if (file.exists()) {
             Image image = new Image(file.toURI().toString());
             imageView.setImage(image);
+            file.delete();
         } else {
-            System.out.println("Arquivo de imagem não encontrado: " + file.getAbsolutePath());
+            Alerts.showAlert("Error", "Error result not found", "", Alert.AlertType.ERROR );
         }
     }
 }
