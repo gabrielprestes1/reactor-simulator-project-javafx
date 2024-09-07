@@ -8,12 +8,13 @@ import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class PFRFormController {
+public class BATEFormController {
 
     @FXML
     private ChoiceBox<String> yamlFileChoiceBox;
@@ -22,11 +23,9 @@ public class PFRFormController {
     @FXML
     private TextField compositionTextField;
     @FXML
-    private TextField inflowVelocityTextField;
+    private TextField totalTimeField;
     @FXML
-    private TextField lengthTextField;
-    @FXML
-    private TextField diameterTextField;
+    private TextField VolumeField;
     @FXML
     private TextField initialPressureTextField;
     @FXML
@@ -45,9 +44,8 @@ public class PFRFormController {
 
     @FXML
     private void initialize() {
-        Constraints.setTextFieldDouble(inflowVelocityTextField);
-        Constraints.setTextFieldDouble(lengthTextField);
-        Constraints.setTextFieldDouble(diameterTextField);
+        Constraints.setTextFieldDouble(totalTimeField);
+        Constraints.setTextFieldDouble(VolumeField);
         Constraints.setTextFieldDouble(initialPressureTextField);
         Constraints.setTextFieldDouble(initialTemperatureTextField);
 
@@ -137,9 +135,8 @@ public class PFRFormController {
         String yamlFile = yamlFileChoiceBox.getValue();
         String composition = compositionTextField.getText();
         String yamlFilePath = new File("C:data", yamlFile).getAbsolutePath();;
-        Double inflowVelocity = parseDouble(inflowVelocityTextField.getText());
-        Double length = parseDouble(lengthTextField.getText());
-        Double diameter = parseDouble(diameterTextField.getText());
+        Double Volume = parseDouble(VolumeField.getText());
+        Double totalTime = parseDouble(totalTimeField.getText());
         Double initialPressure = parseDouble(initialPressureTextField.getText());
         Double initialTemperature = parseDouble(initialTemperatureTextField.getText());
         Integer energyChoice;

@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.layout.AnchorPane?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1167.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
+
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
    <content>
-      <VBox alignment="BOTTOM_CENTER" prefHeight="694.0" prefWidth="1163.0">
+      <VBox alignment="BOTTOM_CENTER" prefHeight="835.0" prefWidth="921.0">
          <children>
             <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button mnemonicParsing="false" text="Save As..." />
-                  <Button mnemonicParsing="false" text="Close" />
+                <Button fx:id="saveAs" mnemonicParsing="false" onAction="#onSaveAsButton" text="Save As..." />
+                  <Button fx:id="close" mnemonicParsing="false" onAction="#onCloseButton" text="Close" />
               </items>
             </ToolBar>
          </children>

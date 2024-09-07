@@ -50,7 +50,7 @@ def process_PRF(data):
 
     # Plot the results
     plt.rcParams['figure.constrained_layout.use'] = True
-    f, ax = plt.subplots(2, 2, figsize=(15,8))
+    f, ax = plt.subplots(2, 2, figsize=(11, 8))
 
     # plot the temperature profile along the flow direction
     ax_t = ax[0, 0].plot(soln.x, soln.T[:], color='C3',  label='temperature')

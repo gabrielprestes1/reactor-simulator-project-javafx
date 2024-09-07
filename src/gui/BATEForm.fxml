@@ -4,8 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PFRFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.BATEFormController">
     <content>
         <VBox prefHeight="410.0" prefWidth="666.0">
             <children>
@@ -28,32 +27,22 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <TextField fx:id="inflowVelocityTextField" GridPane.rowIndex="5">
-                                    <GridPane.margin>
-                                        <Insets right="7.5" />
-                                    </GridPane.margin>
-                                </TextField>
-                                <Label text="Inflow Velocity" GridPane.rowIndex="4">
-                                    <GridPane.margin>
-                                        <Insets top="15.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label text="length" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Total Time" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <GridPane.margin>
                                         <Insets left="7.5" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="lengthTextField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <TextField fx:id="totalTimeField" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <GridPane.margin>
                                         <Insets left="7.5" />
                                     </GridPane.margin>
                                 </TextField>
-                                <TextField fx:id="diameterTextField" GridPane.rowIndex="3">
+                                <TextField fx:id="VolumeField" GridPane.rowIndex="3">
                                     <GridPane.margin>
                                         <Insets right="7.5" />
                                     </GridPane.margin>
                                 </TextField>
-                                <Label text="Diameter" GridPane.rowIndex="2">
+                                <Label text="Volume" GridPane.rowIndex="2">
                                     <GridPane.margin>
                                         <Insets top="15.0" />
                                     </GridPane.margin>
@@ -78,14 +67,9 @@
                                         <Insets top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="m/s" GridPane.rowIndex="4">
+                                <Label text="m^3" GridPane.rowIndex="2">
                                     <GridPane.margin>
-                                        <Insets left="287.0" top="15.0" />
-                                    </GridPane.margin>
-                                </Label>
-                                <Label text="m" GridPane.rowIndex="2">
-                                    <GridPane.margin>
-                                        <Insets left="295.0" top="15.0" />
+                                        <Insets left="285.0" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
                                 <Label fx:id="un6" text="K">
@@ -98,9 +82,9 @@
                                         <Insets left="300.0" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="m" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="s" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <GridPane.margin>
-                                        <Insets left="300.0" top="15.0" />
+                                        <Insets left="308.0" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
                             </children>

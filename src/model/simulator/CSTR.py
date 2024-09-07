@@ -49,7 +49,7 @@ def process_CSTR(data):
 
     # Plotar os resultados
     plt.rcParams['figure.constrained_layout.use'] = True
-    f, ax = plt.subplots(2, 2, figsize=(10, 10))
+    f, ax = plt.subplots(2, 2, figsize=(11, 8))
   
     # Plotar a temperatura do reator
     ax[0, 0].plot(soln.time, soln.T, color='C3', label='Temperature')
