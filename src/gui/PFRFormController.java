@@ -4,14 +4,15 @@ import com.google.gson.Gson;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import model.service.Reactor;
 
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 public class PFRFormController {
 
@@ -42,6 +43,8 @@ public class PFRFormController {
 
     private File currentDirectory;
 
+    private List<String> reactorData = new ArrayList<>();
+
 
     @FXML
     private void initialize() {
@@ -59,6 +62,24 @@ public class PFRFormController {
         currentDirectory = new File("data");
         updateYamlFileList();
         changeButton.setOnAction(event -> openDirectory());
+
+        saveButton.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                Stage stage = (Stage) newScene.getWindow();
+                stage.setOnCloseRequest(event -> {
+                    if (reactorData.isEmpty()) {
+                        Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
+
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            stage.close();
+                        } else {
+                            stage.close();
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     private void updateYamlFileList() {
@@ -99,21 +120,35 @@ public class PFRFormController {
             String inputFilePath = "src/model/simulator/inputPRF.json";
             writeDataToFile(data, inputFilePath);
 
+            reactorData.add(0, yamlFileChoiceBox.getValue());
+            reactorData.add(1, compositionTextField.getText());
+            reactorData.add(2, inflowVelocityTextField.getText());
+            reactorData.add(3, lengthTextField.getText());
+            reactorData.add(4, diameterTextField.getText());
+            reactorData.add(5, initialPressureTextField.getText());
+            reactorData.add(6, initialTemperatureTextField.getText());
+            reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
+
             Stage stage = (Stage) saveButton.getScene().getWindow();
             stage.close();
+
         } catch (IOException | NullPointerException e) {
             Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
         }
-
     }
 
     @FXML
     private void onCancelButton(){
-        Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
+        if (reactorData.isEmpty()) {
+            Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
 
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Stage stage = (Stage) cancelButton.getScene().getWindow();
-            stage.close();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Stage stage = (Stage) cancelButton.getScene().getWindow();
+                stage.close();
+            } else {
+                Stage stage = (Stage) cancelButton.getScene().getWindow();
+                stage.close();
+            }
         }
     }
 
@@ -143,6 +178,25 @@ public class PFRFormController {
         Double initialPressure = parseDouble(initialPressureTextField.getText());
         Double initialTemperature = parseDouble(initialTemperatureTextField.getText());
         Integer energyChoice;
+    }
+
+    public void setData(List<String> data) {
+        this.reactorData = data;
+        if (data != null && !data.isEmpty()) {
+            yamlFileChoiceBox.setValue(data.get(0));
+            compositionTextField.setText(data.get(1));
+            inflowVelocityTextField.setText(data.get(2));
+            lengthTextField.setText(data.get(3));
+            diameterTextField.setText(data.get(4));
+            initialPressureTextField.setText(data.get(5));
+            initialTemperatureTextField.setText(data.get(6));
+
+            if (data.size() > 7 && data.get(7).equals("1")) {
+                Adiabatic.setSelected(true);
+            } else {
+                Isothermal.setSelected(true);
+            }
+        }
     }
 
 }

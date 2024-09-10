@@ -39,8 +39,6 @@ public class GraphFormController {
     }
 
     public void loadPNG() {
-
-
         Image image = new Image(file.toURI().toString());
         imageView.setImage(image);
     }

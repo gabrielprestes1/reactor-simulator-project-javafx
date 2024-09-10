@@ -11,7 +11,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class CSTRFormController {
@@ -43,6 +45,7 @@ public class CSTRFormController {
 
     private File currentDirectory;
 
+    private List<String> reactorData = new ArrayList<>();
 
     @FXML
     private void initialize() {
@@ -60,6 +63,22 @@ public class CSTRFormController {
         currentDirectory = new File("data");
         updateYamlFileList();
         changeButton.setOnAction(event -> openDirectory());
+
+        saveButton.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                Stage stage = (Stage) newScene.getWindow();
+                stage.setOnCloseRequest(event -> {
+                    Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
+
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        stage.close();
+                    } else {
+                        stage.close();
+                    }
+                });
+            }
+        });
+
     }
 
     private void updateYamlFileList() {
@@ -97,7 +116,16 @@ public class CSTRFormController {
                 data.energyChoice = 0;
             }
 
-            String inputFilePath = "src/model/simulator/inputPRF.json";
+            reactorData.add(0, yamlFileChoiceBox.getValue());
+            reactorData.add(1, compositionTextField.getText());
+            reactorData.add(2, volumetricFlowTextField.getText());
+            reactorData.add(3, VolumeField.getText());
+            reactorData.add(4, totalTimeField.getText());
+            reactorData.add(5, initialPressureTextField.getText());
+            reactorData.add(6, initialTemperatureTextField.getText());
+            reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
+
+            String inputFilePath = "src/model/simulator/inputCSTR.json";
             writeDataToFile(data, inputFilePath);
 
             Stage stage = (Stage) saveButton.getScene().getWindow();
@@ -110,11 +138,16 @@ public class CSTRFormController {
 
     @FXML
     private void onCancelButton(){
-        Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
+        if (reactorData.isEmpty()) {
+            Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
 
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            Stage stage = (Stage) cancelButton.getScene().getWindow();
-            stage.close();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Stage stage = (Stage) cancelButton.getScene().getWindow();
+                stage.close();
+            } else {
+                Stage stage = (Stage) cancelButton.getScene().getWindow();
+                stage.close();
+            }
         }
     }
 
@@ -144,6 +177,25 @@ public class CSTRFormController {
         Double initialPressure = parseDouble(initialPressureTextField.getText());
         Double initialTemperature = parseDouble(initialTemperatureTextField.getText());
         Integer energyChoice;
+    }
+
+    public void setData(List<String> data) {
+        this.reactorData = data;
+        if (data != null && !data.isEmpty()) {
+            yamlFileChoiceBox.setValue(data.get(0));
+            compositionTextField.setText(data.get(1));
+            volumetricFlowTextField.setText(data.get(2));
+            VolumeField.setText(data.get(3));
+            totalTimeField.setText(data.get(4));
+            initialPressureTextField.setText(data.get(5));
+            initialTemperatureTextField.setText(data.get(6));
+
+            if (data.size() > 7 && data.get(7).equals("1")) {
+                Adiabatic.setSelected(true);
+            } else {
+                Isothermal.setSelected(true);
+            }
+        }
     }
 
 }

@@ -10,20 +10,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
 
 import java.io.*;
 import java.net.URL;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 
 
 public class MainViewController implements Initializable {
@@ -49,63 +51,91 @@ public class MainViewController implements Initializable {
     @FXML
     private Pane pane;
 
-    private List<Rectangle> rectangles = new ArrayList<>();
+    private ImageView lastAddedImageView;
+    private Map<String, List<String>> reactorDataMap = new HashMap<>();
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
+
     public void onMenuItemBATEAction() {
-        Rectangle rectangle = new Rectangle(100, 100, Color.RED);
-        addRectangle(rectangle);
-        draggableMaker.makeDraggable(rectangle, "/gui/BATEForm.fxml", "Enter Batelada data", (BATEFormController controller) -> {});
+        addReactor("/images/BATE.png");
+        String reactorID = lastAddedImageView.getId();
+        draggableMaker.makeDraggable(lastAddedImageView, "/gui/BATEForm.fxml", "Enter Batelada data", (BATEFormController controller) -> {
+            List<String> reactorData = reactorDataMap.get(reactorID);
+            controller.setData(reactorData);
+        });
     }
 
     public void onMenuItemCSTRAction() {
-        Rectangle rectangle = new Rectangle(100, 100, Color.BLUE);
-        addRectangle(rectangle);
-        draggableMaker.makeDraggable(rectangle, "/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {});
+        addReactor("images/CSTR.png");
+        String reactorID = lastAddedImageView.getId();
+        draggableMaker.makeDraggable(lastAddedImageView, "/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {
+            List<String> reactorData = reactorDataMap.get(reactorID);
+            controller.setData(reactorData);
+        });
     }
 
     public void onMenuItemPFRAction() {
-        Rectangle rectangle = new Rectangle(100, 100, Color.PINK);
-        addRectangle(rectangle);
-        draggableMaker.makeDraggable(rectangle, "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {});
+        addReactor("images/PFR.png");
+        String reactorID = lastAddedImageView.getId();
+        draggableMaker.makeDraggable(lastAddedImageView, "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {
+            List<String> reactorData = reactorDataMap.get(reactorID);
+            controller.setData(reactorData);
+        });
     }
 
-    private void addRectangle(Rectangle rectangle) {
-        pane.getChildren().add(rectangle);
-        rectangle.layoutXProperty().bind(pane.widthProperty().subtract(rectangle.getWidth()).divide(2));
-        rectangle.layoutYProperty().bind(pane.heightProperty().subtract(rectangle.getHeight()).divide(2));
+    private void addReactor(String imagePath) {
 
-        rectangles.add(rectangle);
+        if (reactorDataMap.size() >= 3) {
+            Alerts.showAlert("Error", "Maximum reactors reached", "You can only add up to 3 reactors.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        Image image = new Image(imagePath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(250);
+        imageView.setPreserveRatio(true);
+        String uniqueID = UUID.randomUUID().toString();
+        imageView.setId(uniqueID);
+
+        pane.getChildren().add(imageView);
+
+        reactorDataMap.put(uniqueID, new ArrayList<>());
+        lastAddedImageView = imageView;
+
+        imageView.layoutXProperty().bind(pane.widthProperty().subtract(imageView.getFitWidth()).divide(2));
+        imageView.layoutYProperty().bind(pane.heightProperty().subtract(imageView.getFitHeight()).divide(2));
+
 
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem propertiesItem = new MenuItem("Propriedades");
         propertiesItem.setOnAction(event -> {
-            LoadView view = new LoadView();
-            view.loadView("/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {}, StageStyle.DECORATED);
+
         });
 
         MenuItem deleteItem = new MenuItem("Delete");
         deleteItem.setOnAction(event -> {
-            pane.getChildren().remove(rectangle);
-            rectangles.remove(rectangle);
+            pane.getChildren().remove(imageView);
+            reactorDataMap.remove(uniqueID);
         });
-
 
         contextMenu.getItems().addAll(propertiesItem, deleteItem);
 
-        rectangle.setOnMouseClicked((MouseEvent event) -> {
+        imageView.setOnMouseClicked((MouseEvent event) -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                contextMenu.show(rectangle, event.getScreenX(), event.getScreenY());
+                contextMenu.show(imageView, event.getScreenX(), event.getScreenY());
             }
         });
+
     }
+
 
     @FXML
     private void btSimulateAction() {
 
-        if (rectangles.isEmpty()){
+        if (reactorDataMap.isEmpty()){
             Alerts.showAlert("Error", "Missing values", "Add at least one reactor before simulating", Alert.AlertType.ERROR);
             return;
         }
