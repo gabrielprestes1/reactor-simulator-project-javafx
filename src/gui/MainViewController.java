@@ -23,9 +23,9 @@ import java.net.URL;
 
 import java.util.*;
 
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
+import javafx.stage.StageStyle;
+import model.service.WriterJson;
 
 
 public class MainViewController implements Initializable {
@@ -35,9 +35,6 @@ public class MainViewController implements Initializable {
 
     @FXML
     private MenuItem menuItemBATE;
-
-    @FXML
-    private MenuItem menuItemClose;
 
     @FXML
     private MenuItem menuItemAbout;
@@ -51,40 +48,44 @@ public class MainViewController implements Initializable {
     @FXML
     private Pane pane;
 
+    private WriterJson writerJson = new WriterJson();
     private ImageView lastAddedImageView;
-    private Map<String, List<String>> reactorDataMap = new HashMap<>();
+    private final Map<String, List<String>> reactorDataMap = new HashMap<>();
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
 
     public void onMenuItemBATEAction() {
-        addReactor("/images/BATE.png");
+        addReactor("/images/BATE.png", "BATE");
         String reactorID = lastAddedImageView.getId();
         draggableMaker.makeDraggable(lastAddedImageView, "/gui/BATEForm.fxml", "Enter Batelada data", (BATEFormController controller) -> {
             List<String> reactorData = reactorDataMap.get(reactorID);
             controller.setData(reactorData);
+            controller.setWriterJson(writerJson);
         });
     }
 
     public void onMenuItemCSTRAction() {
-        addReactor("images/CSTR.png");
+        addReactor("images/CSTR.png", "CSTR");
         String reactorID = lastAddedImageView.getId();
         draggableMaker.makeDraggable(lastAddedImageView, "/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {
             List<String> reactorData = reactorDataMap.get(reactorID);
             controller.setData(reactorData);
+            controller.setWriterJson(writerJson);
         });
     }
 
     public void onMenuItemPFRAction() {
-        addReactor("images/PFR.png");
+        addReactor("images/PFR.png", "PFR");
         String reactorID = lastAddedImageView.getId();
         draggableMaker.makeDraggable(lastAddedImageView, "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {
             List<String> reactorData = reactorDataMap.get(reactorID);
             controller.setData(reactorData);
+            controller.setWriterJson(writerJson);
         });
     }
 
-    private void addReactor(String imagePath) {
+    private void addReactor(String imagePath, String reactorType) {
 
         if (reactorDataMap.size() >= 3) {
             Alerts.showAlert("Error", "Maximum reactors reached", "You can only add up to 3 reactors.", Alert.AlertType.ERROR);
@@ -96,12 +97,14 @@ public class MainViewController implements Initializable {
         imageView.setFitWidth(250);
         imageView.setFitHeight(250);
         imageView.setPreserveRatio(true);
-        String uniqueID = UUID.randomUUID().toString();
-        imageView.setId(uniqueID);
+
+        String reactorID = generateUniqueReactorID(reactorType);
+        imageView.setId(reactorID);
+
 
         pane.getChildren().add(imageView);
 
-        reactorDataMap.put(uniqueID, new ArrayList<>());
+        reactorDataMap.put(reactorID, new ArrayList<>());
         lastAddedImageView = imageView;
 
         imageView.layoutXProperty().bind(pane.widthProperty().subtract(imageView.getFitWidth()).divide(2));
@@ -118,7 +121,7 @@ public class MainViewController implements Initializable {
         MenuItem deleteItem = new MenuItem("Delete");
         deleteItem.setOnAction(event -> {
             pane.getChildren().remove(imageView);
-            reactorDataMap.remove(uniqueID);
+            reactorDataMap.remove(reactorID);
         });
 
         contextMenu.getItems().addAll(propertiesItem, deleteItem);
@@ -138,6 +141,15 @@ public class MainViewController implements Initializable {
         if (reactorDataMap.isEmpty()){
             Alerts.showAlert("Error", "Missing values", "Add at least one reactor before simulating", Alert.AlertType.ERROR);
             return;
+        }
+
+        String jsonOutput = writerJson.WriterDataToJson();
+        String filePath = "src/model/simulator/input.json";
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -171,6 +183,18 @@ public class MainViewController implements Initializable {
             e.printStackTrace();
         }
 
+    }
+
+    private String generateUniqueReactorID(String baseName) {
+        int count = 1;
+        String uniqueID;
+
+        do {
+            uniqueID = baseName + "_" + count;
+            count++;
+        } while (reactorDataMap.containsKey(uniqueID));
+
+        return uniqueID;
     }
 
     @Override

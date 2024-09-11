@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import model.service.Reactor;
+import model.service.DirectoryManager;
+import model.service.WriterJson;
 
 
 import java.io.*;
@@ -41,10 +41,9 @@ public class PFRFormController {
     @FXML
     private RadioButton Adiabatic;
 
-    private File currentDirectory;
-
+    private DirectoryManager directoryManager;
     private List<String> reactorData = new ArrayList<>();
-
+    private WriterJson writerJson;
 
     @FXML
     private void initialize() {
@@ -59,9 +58,9 @@ public class PFRFormController {
         Isothermal.setToggleGroup(Group);
         Adiabatic.setToggleGroup(Group);
 
-        currentDirectory = new File("data");
-        updateYamlFileList();
-        changeButton.setOnAction(event -> openDirectory());
+        File initialDirectory = new File("data");
+        directoryManager = new DirectoryManager(initialDirectory, yamlFileChoiceBox);
+        directoryManager.updateYamlFileList();
 
         saveButton.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -82,44 +81,15 @@ public class PFRFormController {
 
     }
 
-    private void updateYamlFileList() {
-        if (currentDirectory.isDirectory()) {
-            File[] files = currentDirectory.listFiles((dir, name) -> name.endsWith(".yaml"));
-            if (files != null) {
-                yamlFileChoiceBox.getItems().clear();
-                Arrays.stream(files)
-                        .map(File::getName)
-                        .forEach(yamlFileChoiceBox.getItems()::add);
-            }
-        }
-    }
-
-    private void openDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(currentDirectory);
-        File selectedDirectory = directoryChooser.showDialog(null);
-
-        if (selectedDirectory != null) {
-            currentDirectory = selectedDirectory;
-            updateYamlFileList();
-        }
+    @FXML
+    private void onOpenDirectory() {
+        directoryManager.openDirectory();
     }
 
     @FXML
     private void onSaveButton() {
 
         try{
-            SimulationData data = new SimulationData();
-
-            if (Adiabatic.isSelected()){
-                data.energyChoice = 1;
-            } else if (Isothermal.isSelected()) {
-                data.energyChoice = 0;
-            }
-
-            String inputFilePath = "src/model/simulator/inputPRF.json";
-            writeDataToFile(data, inputFilePath);
-
             reactorData.add(0, yamlFileChoiceBox.getValue());
             reactorData.add(1, compositionTextField.getText());
             reactorData.add(2, inflowVelocityTextField.getText());
@@ -129,10 +99,21 @@ public class PFRFormController {
             reactorData.add(6, initialTemperatureTextField.getText());
             reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
 
+            String baseKey = "PFR";
+            String uniqueKey = baseKey + "_1";
+
+            int count = 1;
+            while (writerJson.getReactorDataMap().containsKey(uniqueKey)) {
+                uniqueKey = baseKey + "_" + count;
+                count++;
+            }
+
+            writerJson.saveData(uniqueKey, reactorData);
+
             Stage stage = (Stage) saveButton.getScene().getWindow();
             stage.close();
 
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
             Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
         }
     }
@@ -152,34 +133,6 @@ public class PFRFormController {
         }
     }
 
-    private Double parseDouble(String text) {
-        try {
-            return text != null && !text.trim().isEmpty() ? Double.parseDouble(text.trim()) : null;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private void writeDataToFile(SimulationData data, String filePath) throws IOException {
-        Gson gson = new Gson();
-        try (FileWriter writer = new FileWriter(filePath)) {
-            gson.toJson(data, writer);
-            writer.flush();
-        }
-    }
-
-    private class SimulationData {
-        String yamlFile = yamlFileChoiceBox.getValue();
-        String composition = compositionTextField.getText();
-        String yamlFilePath = new File("C:data", yamlFile).getAbsolutePath();;
-        Double inflowVelocity = parseDouble(inflowVelocityTextField.getText());
-        Double length = parseDouble(lengthTextField.getText());
-        Double diameter = parseDouble(diameterTextField.getText());
-        Double initialPressure = parseDouble(initialPressureTextField.getText());
-        Double initialTemperature = parseDouble(initialTemperatureTextField.getText());
-        Integer energyChoice;
-    }
-
     public void setData(List<String> data) {
         this.reactorData = data;
         if (data != null && !data.isEmpty()) {
@@ -197,6 +150,10 @@ public class PFRFormController {
                 Isothermal.setSelected(true);
             }
         }
+    }
+
+    public void setWriterJson(WriterJson writerJson) {
+        this.writerJson = writerJson;
     }
 
 }

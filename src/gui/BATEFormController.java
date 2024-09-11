@@ -7,10 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import model.service.DataService;
+import model.service.DirectoryManager;
+import model.service.WriterJson;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -40,10 +40,9 @@ public class BATEFormController {
     @FXML
     private RadioButton Adiabatic;
 
-    private File currentDirectory;
-
+    private DirectoryManager directoryManager;
     private List<String> reactorData = new ArrayList<>();
-
+    private WriterJson writerJson;
 
     @FXML
     private void initialize() {
@@ -57,9 +56,9 @@ public class BATEFormController {
         Isothermal.setToggleGroup(Group);
         Adiabatic.setToggleGroup(Group);
 
-        currentDirectory = new File("data");
-        updateYamlFileList();
-        changeButton.setOnAction(event -> openDirectory());
+        File initialDirectory = new File("data");
+        directoryManager = new DirectoryManager(initialDirectory, yamlFileChoiceBox);
+        directoryManager.updateYamlFileList();
 
         saveButton.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -77,41 +76,15 @@ public class BATEFormController {
         });
     }
 
-    private void updateYamlFileList() {
-        if (currentDirectory.isDirectory()) {
-            File[] files = currentDirectory.listFiles((dir, name) -> name.endsWith(".yaml"));
-            if (files != null) {
-                yamlFileChoiceBox.getItems().clear();
-                Arrays.stream(files)
-                        .map(File::getName)
-                        .forEach(yamlFileChoiceBox.getItems()::add);
-            }
-        }
-    }
-
-    private void openDirectory() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(currentDirectory);
-        File selectedDirectory = directoryChooser.showDialog(null);
-
-        if (selectedDirectory != null) {
-            currentDirectory = selectedDirectory;
-            updateYamlFileList();
-        }
+    @FXML
+    private void onOpenDirectory() {
+        directoryManager.openDirectory();
     }
 
     @FXML
     private void onSaveButton() {
 
         try {
-            SimulationData data = new SimulationData();
-
-            if (Adiabatic.isSelected()) {
-                data.energyChoice = 1;
-            } else if (Isothermal.isSelected()) {
-                data.energyChoice = 0;
-            }
-
             reactorData.add(0, yamlFileChoiceBox.getValue());
             reactorData.add(1, compositionTextField.getText());
             reactorData.add(2, VolumeField.getText());
@@ -120,12 +93,20 @@ public class BATEFormController {
             reactorData.add(5, initialTemperatureTextField.getText());
             reactorData.add(6, Adiabatic.isSelected() ? "1" : "0");
 
-            String inputFilePath = "src/model/simulator/inputBATE.json";
-            writeDataToFile(data, inputFilePath);
+            String baseKey = "BATE";
+            String uniqueKey = baseKey + "_1";
+
+            int count = 1;
+            while (writerJson.getReactorDataMap().containsKey(uniqueKey)) {
+                uniqueKey = baseKey + "_" + count;
+                count++;
+            }
+
+            writerJson.saveData(uniqueKey, reactorData);
 
             Stage stage = (Stage) saveButton.getScene().getWindow();
             stage.close();
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
             Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
         }
     }
@@ -145,33 +126,6 @@ public class BATEFormController {
         }
     }
 
-    private Double parseDouble(String text) {
-        try {
-            return text != null && !text.trim().isEmpty() ? Double.parseDouble(text.trim()) : null;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private void writeDataToFile(SimulationData data, String filePath) throws IOException {
-        Gson gson = new Gson();
-        try (FileWriter writer = new FileWriter(filePath)) {
-            gson.toJson(data, writer);
-            writer.flush();
-        }
-    }
-
-    private class SimulationData {
-        String yamlFile = yamlFileChoiceBox.getValue();
-        String composition = compositionTextField.getText();
-        String yamlFilePath = new File("C:data", yamlFile).getAbsolutePath();;
-        Double Volume = parseDouble(VolumeField.getText());
-        Double totalTime = parseDouble(totalTimeField.getText());
-        Double initialPressure = parseDouble(initialPressureTextField.getText());
-        Double initialTemperature = parseDouble(initialTemperatureTextField.getText());
-        Integer energyChoice;
-    }
-
     public void setData(List<String> data) {
         this.reactorData = data;
         if (data != null && !data.isEmpty()) {
@@ -188,6 +142,10 @@ public class BATEFormController {
                 Isothermal.setSelected(true);
             }
         }
+    }
+
+    public void setWriterJson(WriterJson writerJson) {
+        this.writerJson = writerJson;
     }
 
 }

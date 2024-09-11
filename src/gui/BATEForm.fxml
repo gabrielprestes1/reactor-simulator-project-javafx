@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -93,7 +94,7 @@
                             </opaqueInsets>
                         </GridPane>
                         <ChoiceBox fx:id="yamlFileChoiceBox" layoutX="19.0" layoutY="38.0" prefHeight="25.0" prefWidth="304.0" />
-                        <Button fx:id="changeButton" layoutX="333.0" layoutY="38.0" mnemonicParsing="false" text="Change" />
+                        <Button fx:id="changeButton" layoutX="333.0" layoutY="38.0" mnemonicParsing="false" onAction="#onOpenDirectory" text="Change" />
                         <Label layoutX="19.0" layoutY="21.0" text="YAML File" />
                   <RadioButton fx:id="Adiabatic" layoutX="18.0" layoutY="144.0" mnemonicParsing="false" selected="true" text="Adiabatic" />
                   <RadioButton fx:id="Isothermal" layoutX="112.0" layoutY="144.0" mnemonicParsing="false" text="Isothermal" />
