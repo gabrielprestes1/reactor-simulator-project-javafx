@@ -11,69 +11,120 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class GraphFormController {
 
     @FXML
-    private ImageView imageView;
+    private ImageView imageView1;
+    @FXML
+    private ImageView imageView2;
+    @FXML
+    private ImageView imageView3;
     @FXML
     private Button close;
     @FXML
     private Button saveAs;
 
-    File file = new File("src/model/simulator/results.png");
+    private static final Logger logger = Logger.getLogger(GraphFormController.class.getName());
+    private static final String FILE_PATH_1 = "src/model/simulator/results_REAC1.png";
+    private static final String FILE_PATH_2 = "src/model/simulator/results_REAC2.png";
+    private static final String FILE_PATH_3 = "src/model/simulator/results_REAC3.png";
+
+    private final File file1 = new File(FILE_PATH_1);
+    private final File file2 = new File(FILE_PATH_2);
+    private final File file3 = new File(FILE_PATH_3);
 
     @FXML
     private void initialize() {
-        loadPNG();
+        loadImages();
 
         close.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 Stage stage = (Stage) newScene.getWindow();
-                stage.setOnCloseRequest(event -> {
-                    file.delete();
-                });
+                stage.setOnCloseRequest(event -> deleteFiles());
             }
         });
     }
 
-    public void loadPNG() {
-        Image image = new Image(file.toURI().toString());
-        imageView.setImage(image);
+    private void loadImages() {
+        loadImage(file1, imageView1);
+        loadImage(file2, imageView2);
+        loadImage(file3, imageView3);
+    }
+
+    private void loadImage(File file, ImageView imageView) {
+        if (file.exists()) {
+            Image image = new Image(file.toURI().toString());
+            imageView.setImage(image);
+        } else {
+            logger.log(Level.WARNING, "File not found: " + file.getPath());
+        }
+    }
+
+    private void deleteFiles() {
+        deleteFile(file1);
+        deleteFile(file2);
+        deleteFile(file3);
+    }
+
+    private void deleteFile(File file) {
+        if (file.exists() && !file.delete()) {
+            logger.log(Level.WARNING, "Failed to delete file: " + file.getPath());
+        }
     }
 
     @FXML
-    private void onCloseButton(){
-        file.delete();
-
+    private void onCloseButton() {
+        deleteFiles();
         Stage stage = (Stage) close.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    private void onSaveAsButton(){
+    private void onSaveAsButton() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Results");
+        fileChooser.setTitle("Salvar Imagens como ZIP");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip"));
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
-        fileChooser.getExtensionFilters().add(extFilter);
+        File zipFile = fileChooser.showSaveDialog(null);
+        if (zipFile != null) {
 
-        File fileToSave = fileChooser.showSaveDialog(null);
+            if (!zipFile.getName().endsWith(".zip")) {
+                zipFile = new File(zipFile.getAbsolutePath() + ".zip");
+            }
 
-        if (fileToSave != null) {
-            try (FileInputStream fis = new FileInputStream(file);
-                 FileOutputStream fos = new FileOutputStream(fileToSave)) {
+            try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile))) {
+                addToZipFile(file1, zipOut);
+                addToZipFile(file2, zipOut);
+                addToZipFile(file3, zipOut);
+                logger.log(Level.INFO, "Imagens salvas no arquivo ZIP: " + zipFile.getPath());
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Falha ao criar o arquivo ZIP", e);
+            }
+        }
+    }
+
+    private void addToZipFile(File sourceFile, ZipOutputStream zipOut) {
+        if (sourceFile.exists()) {
+            try (FileInputStream fis = new FileInputStream(sourceFile)) {
+                ZipEntry zipEntry = new ZipEntry(sourceFile.getName());
+                zipOut.putNextEntry(zipEntry);
 
                 byte[] buffer = new byte[1024];
                 int length;
                 while ((length = fis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, length);
+                    zipOut.write(buffer, 0, length);
                 }
-
+                zipOut.closeEntry();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Falha ao adicionar arquivo ao ZIP: " + sourceFile.getName(), e);
             }
+        } else {
+            logger.log(Level.WARNING, "Arquivo não encontrado: " + sourceFile.getPath());
         }
     }
 

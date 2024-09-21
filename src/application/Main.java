@@ -2,12 +2,9 @@ package application;
 	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-
-
 
 import java.io.IOException;
 
@@ -26,7 +23,7 @@ public class Main extends Application {
 			mainScene = new Scene(scrollPane);
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Reactor Simulator");
-			//primaryStage.setMaximized(true);
+			primaryStage.setMaximized(true);
 			primaryStage.show();
 
 		} catch (IOException e) {

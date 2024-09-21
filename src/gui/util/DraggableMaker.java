@@ -9,19 +9,14 @@ public class DraggableMaker {
 
     private double mouseAnchorX;
     private double mouseAnchorY;
-    private String reactorID;
 
     public <T> void makeDraggable(Node node, String absoluteName, String title, Consumer<T> initializingAction) {
-
         node.setOnMousePressed(mouseEvent -> {
-            reactorID = node.getId();
             mouseAnchorX = mouseEvent.getSceneX() - node.getTranslateX();
             mouseAnchorY = mouseEvent.getSceneY() - node.getTranslateY();
             if (mouseEvent.getClickCount() == 2) {
                 LoadView view = new LoadView();
-                view.loadView(absoluteName, title, (T controller) -> {
-                    initializingAction.accept(controller);
-                }, StageStyle.DECORATED);
+                view.loadView(absoluteName, title, initializingAction, StageStyle.DECORATED);
             }
         });
 

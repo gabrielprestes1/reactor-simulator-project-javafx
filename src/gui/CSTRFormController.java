@@ -1,20 +1,15 @@
 package gui;
 
-import com.google.gson.Gson;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import model.service.DirectoryManager;
 import model.service.WriterJson;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,15 +42,11 @@ public class CSTRFormController {
 
     private DirectoryManager directoryManager;
     private List<String> reactorData = new ArrayList<>();
-    private WriterJson writerJson;
+    private WriterJson writerJson = new WriterJson();
+    private String id;
 
     @FXML
     private void initialize() {
-        Constraints.setTextFieldDouble(volumetricFlowTextField);
-        Constraints.setTextFieldDouble(totalTimeField);
-        Constraints.setTextFieldDouble(VolumeField);
-        Constraints.setTextFieldDouble(initialPressureTextField);
-        Constraints.setTextFieldDouble(initialTemperatureTextField);
 
         ToggleGroup Group = new ToggleGroup();
 
@@ -70,12 +61,12 @@ public class CSTRFormController {
             if (newScene != null) {
                 Stage stage = (Stage) newScene.getWindow();
                 stage.setOnCloseRequest(event -> {
-                    Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
+                    if (reactorData.isEmpty()) {
+                        Optional<ButtonType> result = Alerts.showConfirmation("Exit", "exit without saving?");
 
-                    if (result.isPresent() && result.get() == ButtonType.OK) {
-                        stage.close();
-                    } else {
-                        stage.close();
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            stage.close();
+                        }
                     }
                 });
             }
@@ -91,30 +82,27 @@ public class CSTRFormController {
     @FXML
     private void onSaveButton() {
 
-        try{
-            reactorData.add(0, yamlFileChoiceBox.getValue());
-            reactorData.add(1, compositionTextField.getText());
-            reactorData.add(2, volumetricFlowTextField.getText());
-            reactorData.add(3, VolumeField.getText());
-            reactorData.add(4, totalTimeField.getText());
-            reactorData.add(5, initialPressureTextField.getText());
-            reactorData.add(6, initialTemperatureTextField.getText());
-            reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
+        if (areFieldsFilled()) {
+            try {
+                reactorData.clear();
 
-            String baseKey = "CSTR";
-            String uniqueKey = baseKey + "_1";
+                reactorData.add(0, yamlFileChoiceBox.getValue());
+                reactorData.add(1, compositionTextField.getText());
+                reactorData.add(2, volumetricFlowTextField.getText());
+                reactorData.add(3, VolumeField.getText());
+                reactorData.add(4, totalTimeField.getText());
+                reactorData.add(5, initialPressureTextField.getText());
+                reactorData.add(6, initialTemperatureTextField.getText());
+                reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
 
-            int count = 1;
-            while (writerJson.getReactorDataMap().containsKey(uniqueKey)) {
-                uniqueKey = baseKey + "_" + count;
-                count++;
+                writerJson.saveData(id, reactorData);
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
+
+            } catch (NullPointerException e) {
+                Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
             }
-
-            writerJson.saveData(uniqueKey, reactorData);
-
-            Stage stage = (Stage) saveButton.getScene().getWindow();
-            stage.close();
-        } catch (NullPointerException e) {
+        } else {
             Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
         }
 
@@ -128,10 +116,10 @@ public class CSTRFormController {
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Stage stage = (Stage) cancelButton.getScene().getWindow();
                 stage.close();
-            } else {
-                Stage stage = (Stage) cancelButton.getScene().getWindow();
-                stage.close();
             }
+        } else {
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.close();
         }
     }
 
@@ -154,8 +142,47 @@ public class CSTRFormController {
         }
     }
 
+    public void setID(String id){
+        this.id = id;
+    }
+
     public void setWriterJson(WriterJson writerJson) {
         this.writerJson = writerJson;
     }
 
+    public void reactorExists(String id){
+        if (writerJson.getReactorDataMap().keySet().iterator().next().equals(id)) {
+            Constraints.setTextFieldDouble(volumetricFlowTextField);
+            Constraints.setTextFieldDouble(VolumeField);
+            Constraints.setTextFieldDouble(totalTimeField);
+            Constraints.setTextFieldDouble(initialPressureTextField);
+            Constraints.setTextFieldDouble(initialTemperatureTextField);
+        } else {
+            Constraints.setTextFieldDouble(volumetricFlowTextField);
+            Constraints.setTextFieldDouble(VolumeField);
+            Constraints.setTextFieldDouble(totalTimeField);
+            initialTemperatureTextField.setDisable(true);
+            compositionTextField.setDisable(true);
+            initialPressureTextField.setDisable(true);
+            yamlFileChoiceBox.setDisable(true);
+        }
+    }
+
+    private boolean areFieldsFilled() {
+        return isYamlFileChoiceBoxFilled() &&
+                isTextFieldFilled(compositionTextField) &&
+                isTextFieldFilled(volumetricFlowTextField) &&
+                isTextFieldFilled(VolumeField) &&
+                isTextFieldFilled(totalTimeField) &&
+                isTextFieldFilled(initialPressureTextField) &&
+                isTextFieldFilled(initialTemperatureTextField);
+    }
+
+    private boolean isYamlFileChoiceBoxFilled() {
+        return yamlFileChoiceBox.isDisable() || yamlFileChoiceBox.getValue() != null;
+    }
+
+    private boolean isTextFieldFilled(TextField textField) {
+        return textField.isDisable() || !textField.getText().isEmpty();
+    }
 }

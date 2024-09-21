@@ -1,11 +1,9 @@
 package gui;
 
-import com.google.gson.Gson;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import model.service.DirectoryManager;
 import model.service.WriterJson;
@@ -43,15 +41,11 @@ public class PFRFormController {
 
     private DirectoryManager directoryManager;
     private List<String> reactorData = new ArrayList<>();
-    private WriterJson writerJson;
+    private WriterJson writerJson = new WriterJson();
+    private String id;
 
     @FXML
     private void initialize() {
-        Constraints.setTextFieldDouble(inflowVelocityTextField);
-        Constraints.setTextFieldDouble(lengthTextField);
-        Constraints.setTextFieldDouble(diameterTextField);
-        Constraints.setTextFieldDouble(initialPressureTextField);
-        Constraints.setTextFieldDouble(initialTemperatureTextField);
 
         ToggleGroup Group = new ToggleGroup();
 
@@ -71,8 +65,6 @@ public class PFRFormController {
 
                         if (result.isPresent() && result.get() == ButtonType.OK) {
                             stage.close();
-                        } else {
-                            stage.close();
                         }
                     }
                 });
@@ -89,31 +81,27 @@ public class PFRFormController {
     @FXML
     private void onSaveButton() {
 
-        try{
-            reactorData.add(0, yamlFileChoiceBox.getValue());
-            reactorData.add(1, compositionTextField.getText());
-            reactorData.add(2, inflowVelocityTextField.getText());
-            reactorData.add(3, lengthTextField.getText());
-            reactorData.add(4, diameterTextField.getText());
-            reactorData.add(5, initialPressureTextField.getText());
-            reactorData.add(6, initialTemperatureTextField.getText());
-            reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
+        if (areFieldsFilled()) {
+            try {
+                reactorData.clear();
 
-            String baseKey = "PFR";
-            String uniqueKey = baseKey + "_1";
+                reactorData.add(0, yamlFileChoiceBox.getValue());
+                reactorData.add(1, compositionTextField.getText());
+                reactorData.add(2, inflowVelocityTextField.getText());
+                reactorData.add(3, lengthTextField.getText());
+                reactorData.add(4, diameterTextField.getText());
+                reactorData.add(5, initialPressureTextField.getText());
+                reactorData.add(6, initialTemperatureTextField.getText());
+                reactorData.add(7, Adiabatic.isSelected() ? "1" : "0");
 
-            int count = 1;
-            while (writerJson.getReactorDataMap().containsKey(uniqueKey)) {
-                uniqueKey = baseKey + "_" + count;
-                count++;
+                writerJson.saveData(id, reactorData);
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
+
+            } catch (NullPointerException e) {
+                Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
             }
-
-            writerJson.saveData(uniqueKey, reactorData);
-
-            Stage stage = (Stage) saveButton.getScene().getWindow();
-            stage.close();
-
-        } catch (NullPointerException e) {
+        } else {
             Alerts.showAlert("Error", "Missing values", "Please fill in all fields", Alert.AlertType.WARNING);
         }
     }
@@ -126,15 +114,16 @@ public class PFRFormController {
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Stage stage = (Stage) cancelButton.getScene().getWindow();
                 stage.close();
-            } else {
-                Stage stage = (Stage) cancelButton.getScene().getWindow();
-                stage.close();
             }
+        } else {
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.close();
         }
     }
 
     public void setData(List<String> data) {
         this.reactorData = data;
+
         if (data != null && !data.isEmpty()) {
             yamlFileChoiceBox.setValue(data.get(0));
             compositionTextField.setText(data.get(1));
@@ -149,11 +138,52 @@ public class PFRFormController {
             } else {
                 Isothermal.setSelected(true);
             }
+
         }
+    }
+
+    public void setID(String id){
+        this.id = id;
     }
 
     public void setWriterJson(WriterJson writerJson) {
         this.writerJson = writerJson;
+    }
+
+    public void reactorExists(String id){
+        if (writerJson.getReactorDataMap().keySet().iterator().next().equals(id)) {
+            Constraints.setTextFieldDouble(inflowVelocityTextField);
+            Constraints.setTextFieldDouble(lengthTextField);
+            Constraints.setTextFieldDouble(diameterTextField);
+            Constraints.setTextFieldDouble(initialPressureTextField);
+            Constraints.setTextFieldDouble(initialTemperatureTextField);
+        } else {
+            Constraints.setTextFieldDouble(inflowVelocityTextField);
+            Constraints.setTextFieldDouble(lengthTextField);
+            Constraints.setTextFieldDouble(diameterTextField);
+            initialTemperatureTextField.setDisable(true);
+            compositionTextField.setDisable(true);
+            initialPressureTextField.setDisable(true);
+            yamlFileChoiceBox.setDisable(true);
+        }
+    }
+
+    private boolean areFieldsFilled() {
+        return isYamlFileChoiceBoxFilled() &&
+                isTextFieldFilled(compositionTextField) &&
+                isTextFieldFilled(inflowVelocityTextField) &&
+                isTextFieldFilled(lengthTextField) &&
+                isTextFieldFilled(diameterTextField) &&
+                isTextFieldFilled(initialPressureTextField) &&
+                isTextFieldFilled(initialTemperatureTextField);
+    }
+
+    private boolean isYamlFileChoiceBoxFilled() {
+        return yamlFileChoiceBox.isDisable() || yamlFileChoiceBox.getValue() != null;
+    }
+
+    private boolean isTextFieldFilled(TextField textField) {
+        return textField.isDisable() || !textField.getText().isEmpty();
     }
 
 }

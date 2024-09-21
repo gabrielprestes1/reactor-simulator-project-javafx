@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="844.0" prefWidth="1116.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GraphFormController">
    <content>
-      <VBox alignment="BOTTOM_CENTER" prefHeight="835.0" prefWidth="921.0">
+      <VBox alignment="BOTTOM_CENTER" prefHeight="835.0" prefWidth="932.0">
          <children>
-            <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageView1" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageView2" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageView3" pickOnBounds="true" preserveRatio="true" />
             <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
               <items>
                 <Button fx:id="saveAs" mnemonicParsing="false" onAction="#onSaveAsButton" text="Save As..." />

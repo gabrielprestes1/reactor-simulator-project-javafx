@@ -2,30 +2,23 @@ package gui;
 
 import gui.util.Alerts;
 import gui.util.DraggableMaker;
-
 import gui.util.LoadView;
 
 import javafx.fxml.FXML;
-
 import javafx.fxml.Initializable;
-
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.image.Image;
-
-import java.io.*;
-import java.net.URL;
-
-import java.util.*;
-
-
+import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 import model.service.WriterJson;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class MainViewController implements Initializable {
@@ -48,97 +41,76 @@ public class MainViewController implements Initializable {
     @FXML
     private Pane pane;
 
-    private WriterJson writerJson = new WriterJson();
-    private ImageView lastAddedImageView;
-    private final Map<String, List<String>> reactorDataMap = new HashMap<>();
+    private final WriterJson writerJson = new WriterJson();
 
     DraggableMaker draggableMaker = new DraggableMaker();
 
 
     public void onMenuItemBATEAction() {
-        addReactor("/images/BATE.png", "BATE");
-        String reactorID = lastAddedImageView.getId();
-        draggableMaker.makeDraggable(lastAddedImageView, "/gui/BATEForm.fxml", "Enter Batelada data", (BATEFormController controller) -> {
-            List<String> reactorData = reactorDataMap.get(reactorID);
-            controller.setData(reactorData);
-            controller.setWriterJson(writerJson);
+        if (!pane.getChildren().isEmpty()){
+            Alerts.showAlert("Information", "Alert", "The BATELADA Reactor can only be used alone.", Alert.AlertType.INFORMATION);
+            return;
+        }
+        writerJson.addReactor("/images/BATE.png", "BATE",  pane);
+        String reactorID = writerJson.returID();
+        draggableMaker.makeDraggable(writerJson.getLastAddedImageView(), "/gui/BATEForm.fxml", "Enter Batelada data", (BATEFormController controller) -> {
+            controller.setID(reactorID);
+            if (writerJson.getReactorDataMap().containsKey(reactorID)) {
+                List<String> reactorData = writerJson.getReactorDataMap().get(reactorID);
+                controller.setData(reactorData);
+                controller.setWriterJson(writerJson);
+                System.out.println(writerJson.getReactorDataMap());
+            }
         });
     }
 
     public void onMenuItemCSTRAction() {
-        addReactor("images/CSTR.png", "CSTR");
-        String reactorID = lastAddedImageView.getId();
-        draggableMaker.makeDraggable(lastAddedImageView, "/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {
-            List<String> reactorData = reactorDataMap.get(reactorID);
-            controller.setData(reactorData);
-            controller.setWriterJson(writerJson);
+        if (!pane.getChildren().isEmpty() && pane.getChildren().get(0).getId().equals("BATE_1")) {
+            Alerts.showAlert("Information", "Alert", "BATELADA Reactor can only be used alone, you must delete it before adding another type of reactor.", Alert.AlertType.INFORMATION);
+            return;
+        }
+        writerJson.addReactor("images/CSTR.png", "CSTR", pane);
+        String reactorID = writerJson.returID();
+        draggableMaker.makeDraggable(writerJson.getLastAddedImageView(), "/gui/CSTRForm.fxml", "Enter CSTR data", (CSTRFormController controller) -> {
+            controller.setID(reactorID);
+            if (!writerJson.getReactorDataMap().isEmpty()){
+                controller.reactorExists(reactorID);
+            }
+            if (writerJson.getReactorDataMap().containsKey(reactorID)) {
+                List<String> reactorData = writerJson.getReactorDataMap().get(reactorID);
+                controller.setData(reactorData);
+                controller.setWriterJson(writerJson);
+                System.out.println(writerJson.getReactorDataMap());
+            }
         });
     }
 
     public void onMenuItemPFRAction() {
-        addReactor("images/PFR.png", "PFR");
-        String reactorID = lastAddedImageView.getId();
-        draggableMaker.makeDraggable(lastAddedImageView, "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {
-            List<String> reactorData = reactorDataMap.get(reactorID);
-            controller.setData(reactorData);
-            controller.setWriterJson(writerJson);
-        });
-    }
-
-    private void addReactor(String imagePath, String reactorType) {
-
-        if (reactorDataMap.size() >= 3) {
-            Alerts.showAlert("Error", "Maximum reactors reached", "You can only add up to 3 reactors.", Alert.AlertType.ERROR);
+        if (!pane.getChildren().isEmpty() && pane.getChildren().get(0).getId().equals("BATE_1")) {
+            Alerts.showAlert("Information", "Alert", "BATELADA Reactor can only be used alone, you must delete it before adding another type of reactor.", Alert.AlertType.INFORMATION);
             return;
         }
-
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(250);
-        imageView.setFitHeight(250);
-        imageView.setPreserveRatio(true);
-
-        String reactorID = generateUniqueReactorID(reactorType);
-        imageView.setId(reactorID);
-
-
-        pane.getChildren().add(imageView);
-
-        reactorDataMap.put(reactorID, new ArrayList<>());
-        lastAddedImageView = imageView;
-
-        imageView.layoutXProperty().bind(pane.widthProperty().subtract(imageView.getFitWidth()).divide(2));
-        imageView.layoutYProperty().bind(pane.heightProperty().subtract(imageView.getFitHeight()).divide(2));
-
-
-        ContextMenu contextMenu = new ContextMenu();
-
-        MenuItem propertiesItem = new MenuItem("Propriedades");
-        propertiesItem.setOnAction(event -> {
-
-        });
-
-        MenuItem deleteItem = new MenuItem("Delete");
-        deleteItem.setOnAction(event -> {
-            pane.getChildren().remove(imageView);
-            reactorDataMap.remove(reactorID);
-        });
-
-        contextMenu.getItems().addAll(propertiesItem, deleteItem);
-
-        imageView.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                contextMenu.show(imageView, event.getScreenX(), event.getScreenY());
+        writerJson.addReactor("images/PFR.png", "PFR", pane);
+        String reactorID = writerJson.returID();
+        draggableMaker.makeDraggable(writerJson.getLastAddedImageView(), "/gui/PFRForm.fxml", "Enter PFR data", (PFRFormController controller) -> {
+            controller.setID(reactorID);
+            if (!writerJson.getReactorDataMap().isEmpty()){
+                controller.reactorExists(reactorID);
+            }
+            if (writerJson.getReactorDataMap().containsKey(reactorID)) {
+                List<String> reactorData = writerJson.getReactorDataMap().get(reactorID);
+                controller.setData(reactorData);
+                controller.setWriterJson(writerJson);
+                System.out.println(writerJson.getReactorDataMap());
             }
         });
-
     }
 
 
     @FXML
     private void btSimulateAction() {
 
-        if (reactorDataMap.isEmpty()){
+        if (writerJson.getReactorDataMap().isEmpty()){
             Alerts.showAlert("Error", "Missing values", "Add at least one reactor before simulating", Alert.AlertType.ERROR);
             return;
         }
@@ -168,7 +140,7 @@ public class MainViewController implements Initializable {
             int exitCode = process.waitFor();
             if (exitCode == 0) {
                 process.onExit();
-                File file = new File("src/model/simulator/results.png");
+                File file = new File("src/model/simulator/results_REAC1.png");
 
                 if (!file.exists()) {
                     Alerts.showAlert("Error", "Missing values", "Please enter the data in the reactors", Alert.AlertType.ERROR);
@@ -183,18 +155,6 @@ public class MainViewController implements Initializable {
             e.printStackTrace();
         }
 
-    }
-
-    private String generateUniqueReactorID(String baseName) {
-        int count = 1;
-        String uniqueID;
-
-        do {
-            uniqueID = baseName + "_" + count;
-            count++;
-        } while (reactorDataMap.containsKey(uniqueID));
-
-        return uniqueID;
     }
 
     @Override

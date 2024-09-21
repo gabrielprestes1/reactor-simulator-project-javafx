@@ -1,28 +1,63 @@
+import json
+import os
+import re
 import PFR
 import CSTR
 import Batelada
-import json
-import os
 
-if __name__ == '__main__':
-    jsonPFR = os.path.join(os.path.dirname(__file__), 'inputPRF.json')
-    jsonCSTR = os.path.join(os.path.dirname(__file__), 'inputCSTR.json')
-    jsonBATE = os.path.join(os.path.dirname(__file__), 'inputBATE.json')
 
-    if os.path.exists(jsonPFR):
-        with open(jsonPFR, 'r') as f:
-            dataPFR = json.load(f)
-        PFR.process_PRF(dataPFR)
+json_file = os.path.join(os.path.dirname(__file__), 'input.json')
 
-    if os.path.exists(jsonCSTR):
-        with open(jsonCSTR, 'r') as f:
-            dataCSTR = json.load(f)
-        CSTR.process_CSTR(dataCSTR)
+if os.path.exists(json_file):
+    with open(json_file, 'r') as f:
+        data = json.load(f)
 
-    if os.path.exists(jsonBATE):
-        with open(jsonBATE, 'r') as f:
-            dataBATE = json.load(f)
-        Batelada.process_BATE(dataBATE)
+    arquivo, temperatura_final, pressao_final, fracoes_moleculares = None, None, None, None
 
+
+    n = 0
+    for reactor, values in data.items():
+        n += 1
+        reactor_type = re.sub(r'_\d+', '', reactor)
+        reactor_id = reactor.split('_')[1]
+
+        if reactor_type == "PFR":
+
+            if n > 1:
+                values = [
+                    arquivo,
+                    fracoes_moleculares,
+                    values[2],
+                    values[3],
+                    values[4],
+                    pressao_final,
+                    temperatura_final,
+                    values[7]
+                ]
+
+
+            arquivo, temperatura_final, pressao_final, fracoes_moleculares = PFR.process_PRF(*values, n)
+
+        elif reactor_type == "CSTR":
+
+            if n > 1:
+                values = [
+                    arquivo,
+                    fracoes_moleculares,
+                    values[2],
+                    values[3],
+                    values[4],
+                    pressao_final,
+                    temperatura_final,
+                    values[7]
+                ]
+
+            arquivo, temperatura_final, pressao_final, fracoes_moleculares = CSTR.process_CSTR(*values, n)
+
+        elif reactor_type == "BATE":
+            Batelada.process_BATE(*values, n)
+
+
+        data[reactor] = values
 
 

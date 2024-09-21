@@ -12,8 +12,13 @@
                 <AnchorPane prefHeight="397.0" prefWidth="666.0">
                     <children>
                         <Label layoutX="19.0" layoutY="78.0" text="Composition of reagents" />
-                        <TextField fx:id="compositionTextField" layoutX="19.0" layoutY="95.0" prefHeight="29.0" prefWidth="456.0" promptText="H2:2, O2:1, AR:0.1" />
                         <Label layoutX="19.0" layoutY="169.0" text="Data Reactor" />
+                        <Label layoutX="19.0" layoutY="21.0" text="YAML File" />
+                        <ChoiceBox fx:id="yamlFileChoiceBox" layoutX="19.0" layoutY="38.0" prefHeight="25.0" prefWidth="304.0" />
+                        <Button fx:id="changeButton" layoutX="333.0" layoutY="38.0" mnemonicParsing="false" onAction="#onOpenDirectory" text="Change" />
+                        <TextField fx:id="compositionTextField" layoutX="19.0" layoutY="95.0" prefHeight="29.0" prefWidth="456.0" promptText="H2:2, O2:1, AR:0.1" />
+                  <RadioButton fx:id="Isothermal" layoutX="112.0" layoutY="144.0" mnemonicParsing="false" text="Isothermal" />
+                  <RadioButton fx:id="Adiabatic" layoutX="18.0" layoutY="144.0" mnemonicParsing="false" selected="true" text="Adiabatic" />
                         <GridPane layoutX="14.0" layoutY="186.0" prefHeight="183.0" prefWidth="638.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -28,7 +33,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <TextField fx:id="volumetricFlowTextField" GridPane.rowIndex="5">
+                                <TextField fx:id="initialTemperatureTextField" GridPane.rowIndex="1">
                                     <GridPane.margin>
                                         <Insets right="7.5" />
                                     </GridPane.margin>
@@ -43,7 +48,7 @@
                                         <Insets left="7.5" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="totalTimeField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <TextField fx:id="initialPressureTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <GridPane.margin>
                                         <Insets left="7.5" />
                                     </GridPane.margin>
@@ -58,7 +63,7 @@
                                         <Insets top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="initialPressureTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <TextField fx:id="totalTimeField" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                     <GridPane.margin>
                                         <Insets left="7.5" />
                                     </GridPane.margin>
@@ -68,7 +73,7 @@
                                         <Insets left="7.5" top="15.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="initialTemperatureTextField" GridPane.rowIndex="1">
+                                <TextField fx:id="volumetricFlowTextField" GridPane.rowIndex="5">
                                     <GridPane.margin>
                                         <Insets right="7.5" />
                                     </GridPane.margin>
@@ -108,11 +113,6 @@
                                 <Insets />
                             </opaqueInsets>
                         </GridPane>
-                        <ChoiceBox fx:id="yamlFileChoiceBox" layoutX="19.0" layoutY="38.0" prefHeight="25.0" prefWidth="304.0" />
-                        <Button fx:id="changeButton" layoutX="333.0" layoutY="38.0" mnemonicParsing="false" onAction="#onOpenDirectory" text="Change" />
-                        <Label layoutX="19.0" layoutY="21.0" text="YAML File" />
-                  <RadioButton fx:id="Adiabatic" layoutX="18.0" layoutY="144.0" mnemonicParsing="false" selected="true" text="Adiabatic" />
-                  <RadioButton fx:id="Isothermal" layoutX="112.0" layoutY="144.0" mnemonicParsing="false" text="Isothermal" />
                     </children>
                 </AnchorPane>
                 <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="7.0" prefWidth="589.0">
